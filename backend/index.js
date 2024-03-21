@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors")
 const mongoose = require('mongoose');
+const userRouter = require("./routes/userRoutes");
 
 app.use(cors())
 app.use(express.json())
@@ -22,6 +23,8 @@ async function main() {
 app.get("/",(req,res)=>{
     res.send("Welcome to the server!!!")
 })
+
+app.use("/users",userRouter)
 
 const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
