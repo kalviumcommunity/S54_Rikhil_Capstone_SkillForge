@@ -28,7 +28,7 @@ userRouter.post(
     if (findUser.length == 0) {
       await newUserData.save();
       let token = jwt.sign(
-        { username: req.body.userName },
+        { username: req.body.username },
         process.env.JWT_PASS
       );
       res.send(token);
