@@ -12,3 +12,9 @@ exports.userValidation = Joi.object({
     phone: Joi.number().integer().min(1111111111).max(9999999999).required(),
   }).required(),
 });
+
+exports.taskValidation = Joi.object({
+  title: Joi.string().required(),
+  description: Joi.string().required(),
+  bounty: Joi.number().required()
+});
