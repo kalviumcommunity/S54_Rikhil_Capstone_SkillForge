@@ -1,32 +1,34 @@
 const express = require("express");
 const app = express();
-const cors = require("cors")
-const mongoose = require('mongoose');
+const cors = require("cors");
+const mongoose = require("mongoose");
 const userRouter = require("./routes/userRoutes");
+const companyRouter = require("./routes/companyRoutes");
 
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 
-require('dotenv').config();
+require("dotenv").config();
 main()
-    .then(() => {
-        console.log("Connection Successful with Database 📊!");
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+  .then(() => {
+    console.log("Connection Successful with Database 📊!");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 async function main() {
-    await mongoose.connect(process.env.MONGO_LINK);
-};
+  await mongoose.connect(process.env.MONGO_LINK);
+}
 
-app.get("/",(req,res)=>{
-    res.send("Welcome to the server!!!")
-})
+app.get("/", (req, res) => {
+  res.send("Welcome to the server!!!");
+});
 
-app.use("/users",userRouter)
+app.use("/users", userRouter);
+app.use("/company", companyRouter);
 
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-    console.log(`Connected to server ${PORT} 🚀!`);
-})
+  console.log(`Connected to server ${PORT} 🚀!`);
+});
