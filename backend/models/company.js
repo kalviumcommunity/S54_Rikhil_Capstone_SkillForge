@@ -1,33 +1,41 @@
-const mongoose = require("mongoose")
-const formatDate = require("../utils/formatDate")
+const mongoose = require("mongoose");
+const formatDate = require("../utils/formatDate");
 
 const companySchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    address: {
-        type: String,
-        required: true
-    },
+  name: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  contact: {
     phone: {
-        type: String,
-        required: true
+      type: Number,
+      required: true,
+      unique: true,
     },
     email: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
+      unique: true,
     },
-    website: {
-        type: String,
-        required: true
-    },
-    created: {
-        type: Date,
-        default: formatDate
-    }
-})
+  },
+  website: {
+    type: String,
+    required: true,
+  },
+  created: {
+    type: Date,
+    default: formatDate,
+  },
+});
 
-const Company = mongoose.model("Company", companySchema)
+const Company = mongoose.model("Company", companySchema);
 
-module.exports = Company
+module.exports = Company;
