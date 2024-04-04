@@ -1,7 +1,6 @@
 const express = require("express");
 const wrapAsync = require("../utils/wrapAsync");
 const User = require("../models/user");
-const app = express();
 const userRouter = express.Router();
 const jwt = require("jsonwebtoken");
 const { userValidation } = require("../utils/validation");

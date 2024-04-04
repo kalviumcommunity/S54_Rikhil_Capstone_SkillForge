@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const userRouter = require("./routes/userRoutes");
 const companyRouter = require("./routes/companyRoutes");
+const taskRouter = require("./routes/taskRoutes");
 
 app.use(cors());
 app.use(express.json());
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 
 app.use("/users", userRouter);
 app.use("/company", companyRouter);
+app.use("/tasks", taskRouter);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
