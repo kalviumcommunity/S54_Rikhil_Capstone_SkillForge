@@ -31,7 +31,10 @@ const jwtVerify = (req, res, next) => {
   }
 };
 
-taskRouter.get("/all");
+taskRouter.get("/all",wrapAsync(async(req,res)=>{
+    let findTasks = await Task.find({})
+    res.send(findTasks)
+}));
 
 taskRouter.post(
   "/new",
