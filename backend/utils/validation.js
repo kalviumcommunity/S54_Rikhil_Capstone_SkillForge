@@ -33,3 +33,16 @@ exports.taskValidation = Joi.object({
   description: Joi.string().required(),
   bounty: Joi.number().required(),
 });
+
+exports.institutionValidation = Joi.object({
+  name: Joi.string().required(),
+  password: Joi.string()
+    .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$"))
+    .required(),
+  description: Joi.string().required(),
+  address: Joi.string().required(),
+  contact: Joi.object({
+    email: Joi.string().email({ minDomainSegments: 2 }).required(),
+    phone: Joi.number().integer().min(1111111111).max(9999999999),
+  }).required(),
+});
