@@ -46,3 +46,11 @@ exports.institutionValidation = Joi.object({
     phone: Joi.number().integer().min(1111111111).max(9999999999),
   }).required(),
 });
+
+exports.eventValidation = Joi.object({
+  name: Joi.string().required(),
+  description: Joi.string().required(),
+  image: Joi.string().required(),
+  volunteers: Joi.number().required(),
+  institution: Joi.string().required(),
+});
