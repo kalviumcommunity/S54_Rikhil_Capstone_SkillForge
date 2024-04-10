@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const { userValidation } = require("../utils/validation");
 const ExpressError = require("../utils/ExpressError.js");
 const passwordHash = require("password-hash");
+const Institution = require("../models/institution.js");
 require("dotenv").config({ path: "../.env" });
 
 userRouter.use(express.json());
@@ -23,32 +24,37 @@ userRouter.post(
   "/signup",
   validateUser,
   wrapAsync(async (req, res) => {
-    let { password } = req.body;
+    let { password, institution } = req.body;
     let hashedPassword = passwordHash.generate(password);
-    let newUserData = new User({
-      name: req.body.name,
-      username: req.body.username,
-      institution: req.body.institution,
-      password: hashedPassword,
-      contact: req.body.contact,
-    });
-    let findUser = await User.find({ username: req.body.username });
-    if (findUser.length == 0) {
-      await newUserData.save();
-      let token = jwt.sign(
-        {
-          data: {
-            name: req.body.name,
-            username: req.body.username,
-            institution: req.body.institution,
+    let findInsti = await Institution.findOne({ name: institution });
+    if (findInsti != null) {
+      let newUserData = new User({
+        name: req.body.name,
+        username: req.body.username,
+        institution: findInsti,
+        password: hashedPassword,
+        contact: req.body.contact,
+      });
+      let findUser = await User.find({ username: req.body.username });
+      if (findUser.length == 0) {
+        await newUserData.save();
+        let token = jwt.sign(
+          {
+            data: {
+              name: req.body.name,
+              username: req.body.username,
+              institution: req.body.institution,
+            },
+            type: "Student",
           },
-          type: "Student",
-        },
-        process.env.JWT_PASS
-      );
-      res.send(token);
+          process.env.JWT_PASS
+        );
+        res.send(token);
+      } else {
+        throw new ExpressError(400, "Username Exists");
+      }
     } else {
-      throw new ExpressError(400, "Username Exists");
+      throw new ExpressError(404, "Institution not found!");
     }
   })
 );
