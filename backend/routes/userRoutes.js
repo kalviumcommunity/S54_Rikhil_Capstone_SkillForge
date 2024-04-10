@@ -43,7 +43,7 @@ userRouter.post(
             data: {
               name: req.body.name,
               username: req.body.username,
-              institution: req.body.institution,
+              institution: findInsti,
             },
             type: "Student",
           },
