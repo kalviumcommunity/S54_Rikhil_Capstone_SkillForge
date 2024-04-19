@@ -57,8 +57,8 @@ companyRouter.post(
 companyRouter.post(
   "/signin",
   wrapAsync(async (req, res) => {
-    let { name, password } = req.body;
-    let companyFind = await Company.find({ name: name });
+    let { orgname, password } = req.body;
+    let companyFind = await Company.find({ orgname: orgname });
     if (companyFind.length != 0) {
       let storedPassword = companyFind[0].password;
       if (passwordHash.verify(password, storedPassword)) {
@@ -66,6 +66,7 @@ companyRouter.post(
           {
             data: {
               name: companyFind[0].name,
+              orgname: companyFind[0].orgname,
               website: companyFind[0].website,
             },
             type: "Company",
