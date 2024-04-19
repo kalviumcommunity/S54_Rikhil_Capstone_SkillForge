@@ -242,6 +242,7 @@ export default function UserRegister() {
           </Button>
         </form>
       </div>
+      <Text fontSize={"2vmin"}>Already registered? <Link style={{color:'#8a3bf3', textDecoration:'underline'}} to={'/user/login'}>Login</Link></Text>
     </VStack>
   );
 }

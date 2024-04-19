@@ -168,6 +168,7 @@ export default function UserRegister() {
           </Button>
         </form>
       </div>
+      <Text fontSize={"2vmin"}>Not Registered? <Link style={{color:'#8a3bf3', textDecoration:'underline'}} to={'/user/register'}>Register</Link></Text>
     </VStack>
   );
 }

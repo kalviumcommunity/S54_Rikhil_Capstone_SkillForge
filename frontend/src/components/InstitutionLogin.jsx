@@ -152,6 +152,7 @@ export default function InstitutionLogin() {
           </Button>
         </form>
       </div>
+      <Text fontSize={"2vmin"}>Not Registered? <Link style={{color:'#8a3bf3', textDecoration:'underline'}} to={'/institution/register'}>Register</Link></Text>
     </VStack>
   );
 }

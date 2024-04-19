@@ -151,6 +151,7 @@ export default function CompanyRegister() {
           </Button>
         </form>
       </div>
+      <Text fontSize={"2vmin"}>Not registered? <Link style={{color:'#8a3bf3', textDecoration:'underline'}} to={'/company/register'}>Register</Link></Text>
     </VStack>
   );
 }
