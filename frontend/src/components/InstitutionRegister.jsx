@@ -21,8 +21,9 @@ import { loginCheck } from "../utils/loginCheck";
 import { AppContext } from "./Context";
 
 export default function InstitutionRegister() {
+  document.title = "SkillForge - Institution Register";
   const navigate = useNavigate();
-  const {setLogin} = useContext(AppContext)
+  const { setLogin } = useContext(AppContext);
   document.title = "SkillForge - Institution Registeration";
   const {
     register,
@@ -39,13 +40,13 @@ export default function InstitutionRegister() {
       status: "loading",
       isClosable: false,
     });
-      setTimeout(() => {
+    setTimeout(() => {
       axios
         .post("http://localhost:8080/institution/signup", data)
         .then((res) => {
           setCookie("auth-token", res.data, 10);
           setCookie("type", "Institution", 10);
-          setLogin(loginCheck())
+          setLogin(loginCheck());
           toast.update(toastIdRef.current, {
             title: `Signed Up`,
             status: "success",
@@ -221,7 +222,15 @@ export default function InstitutionRegister() {
           </Button>
         </form>
       </div>
-      <Text fontSize={"2vmin"}>Already registered? <Link style={{color:'#8a3bf3', textDecoration:'underline'}} to={'/institution/login'}>Login</Link></Text>
+      <Text fontSize={"2vmin"}>
+        Already registered?{" "}
+        <Link
+          style={{ color: "#8a3bf3", textDecoration: "underline" }}
+          to={"/institution/login"}
+        >
+          Login
+        </Link>
+      </Text>
     </VStack>
   );
 }

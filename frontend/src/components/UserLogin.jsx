@@ -23,6 +23,7 @@ import { AppContext } from "./Context";
 import { loginCheck } from "../utils/loginCheck";
 
 export default function UserRegister() {
+  document.title = "SkillForge - User Login";
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const { setLogin } = useContext(AppContext);
@@ -168,7 +169,15 @@ export default function UserRegister() {
           </Button>
         </form>
       </div>
-      <Text fontSize={"2vmin"}>Not Registered? <Link style={{color:'#8a3bf3', textDecoration:'underline'}} to={'/user/register'}>Register</Link></Text>
+      <Text fontSize={"2vmin"}>
+        Not Registered?{" "}
+        <Link
+          style={{ color: "#8a3bf3", textDecoration: "underline" }}
+          to={"/user/register"}
+        >
+          Register
+        </Link>
+      </Text>
     </VStack>
   );
 }

@@ -23,9 +23,10 @@ import { AppContext } from "./Context";
 import { loginCheck } from "../utils/loginCheck";
 
 export default function UserRegister() {
+  document.title = "SkillForge - User Register";
   const navigate = useNavigate();
   const [data, setData] = useState([]);
-  const {setLogin} = useContext(AppContext)
+  const { setLogin } = useContext(AppContext);
   const {
     register,
     handleSubmit,
@@ -57,7 +58,7 @@ export default function UserRegister() {
         .then((res) => {
           setCookie("auth-token", res.data, 10);
           setCookie("type", "User", 10);
-          setLogin(loginCheck())
+          setLogin(loginCheck());
           toast.update(toastIdRef.current, {
             title: `Signed Up`,
             status: "success",
@@ -242,7 +243,15 @@ export default function UserRegister() {
           </Button>
         </form>
       </div>
-      <Text fontSize={"2vmin"}>Already registered? <Link style={{color:'#8a3bf3', textDecoration:'underline'}} to={'/user/login'}>Login</Link></Text>
+      <Text fontSize={"2vmin"}>
+        Already registered?{" "}
+        <Link
+          style={{ color: "#8a3bf3", textDecoration: "underline" }}
+          to={"/user/login"}
+        >
+          Login
+        </Link>
+      </Text>
     </VStack>
   );
 }

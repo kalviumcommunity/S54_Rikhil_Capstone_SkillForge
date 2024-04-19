@@ -6,20 +6,21 @@ import { FaUniversity } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export default function PreLogin() {
+  document.title = "SkillForge - Select a Role";
   return (
     <div className="prelogin">
       <Heading fontSize={["3vmax", "2vmax"]}>Select a Role</Heading>
       <HStack spacing={"4vmin"}>
-        <Link to={'/company/register'}>
-            <Button
-              size={["xs", "sm", "sm"]}
-              colorScheme="red"
-              leftIcon={<FaBuilding />}
-            >
-              Company
-            </Button>
+        <Link to={"/company/register"}>
+          <Button
+            size={["xs", "sm", "sm"]}
+            colorScheme="red"
+            leftIcon={<FaBuilding />}
+          >
+            Company
+          </Button>
         </Link>
-        <Link to={'/user/register'}>
+        <Link to={"/user/register"}>
           <Button
             size={["xs", "sm", "sm"]}
             colorScheme="red"
@@ -28,7 +29,7 @@ export default function PreLogin() {
             User
           </Button>
         </Link>
-        <Link to={'/institution/register'}>
+        <Link to={"/institution/register"}>
           <Button
             size={["xs", "sm", "sm"]}
             colorScheme="red"

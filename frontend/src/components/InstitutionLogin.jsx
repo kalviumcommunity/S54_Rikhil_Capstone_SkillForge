@@ -21,6 +21,7 @@ import { loginCheck } from "../utils/loginCheck";
 import { AppContext } from "./Context";
 
 export default function InstitutionLogin() {
+  document.title = "SkillForge - Institution Login";
   const navigate = useNavigate();
   const { setLogin } = useContext(AppContext);
   document.title = "SkillForge - Institution Registeration";
@@ -64,14 +65,13 @@ export default function InstitutionLogin() {
                 status: "error",
                 isClosable: false,
               });
-            } else if (err.response.status==404){
-                toast.update(toastIdRef.current, {
-                    title: `Institution not found!`,
-                    status: "error",
-                    isClosable: false,
-                  });
-            } 
-            else {
+            } else if (err.response.status == 404) {
+              toast.update(toastIdRef.current, {
+                title: `Institution not found!`,
+                status: "error",
+                isClosable: false,
+              });
+            } else {
               toast.update(toastIdRef.current, {
                 title: `Server Error! Contact Admin`,
                 status: "error",
@@ -152,7 +152,15 @@ export default function InstitutionLogin() {
           </Button>
         </form>
       </div>
-      <Text fontSize={"2vmin"}>Not Registered? <Link style={{color:'#8a3bf3', textDecoration:'underline'}} to={'/institution/register'}>Register</Link></Text>
+      <Text fontSize={"2vmin"}>
+        Not Registered?{" "}
+        <Link
+          style={{ color: "#8a3bf3", textDecoration: "underline" }}
+          to={"/institution/register"}
+        >
+          Register
+        </Link>
+      </Text>
     </VStack>
   );
 }
