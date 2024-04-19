@@ -28,18 +28,19 @@ companyRouter.post(
     let hashedPassword = passwordHash.generate(password);
     let newCompanyData = new Company({
       name: req.body.name,
+      orgname: req.body.orgname,
       password: hashedPassword,
-      address: req.body.address,
       contact: req.body.contact,
       website: req.body.website,
     });
-    let findComp = await Company.find({ name: req.body.name });
+    let findComp = await Company.find({ orgname: req.body.orgname });
     if (findComp.length == 0) {
       await newCompanyData.save();
       let token = jwt.sign(
         {
           data: {
             name: req.body.name,
+            orgname: req.body.orgname,
             website: req.body.website,
           },
           type: "Company",

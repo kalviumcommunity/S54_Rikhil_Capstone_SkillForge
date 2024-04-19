@@ -69,7 +69,7 @@
   display: flex;
   gap: 3vmin;
   background: rgba(50, 50, 50, 0.25);
-  box-shadow: 0 0px 12px 0 #8b3bf328;
+  box-shadow: 0 0px 20px 0 #8b3bf328;
   backdrop-filter: blur( 4px );
   -webkit-backdrop-filter: blur( 4px );
   border-radius: 10px;
@@ -92,6 +92,6 @@
 }
 @media (max-width:800px) {
   .form{
-    width: 60vw;
+    width: 80vw;
   }
 }

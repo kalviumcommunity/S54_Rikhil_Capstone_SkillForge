@@ -4,6 +4,8 @@ import Home from "../Home";
 import Test from "../Test";
 import PreLogin from "../PreLogin";
 import CompanyRegister from "../CompanyRegister";
+import UserRegister from "../UserRegister";
+import InstitutionRegister from "../InstitutionRegister";
 
 export default function AllRoutes() {
   return (
@@ -11,6 +13,8 @@ export default function AllRoutes() {
       <Route path="/" element={<Home />} />
       <Route path="/prelogin" element={<PreLogin />} />
       <Route path="/company/register" element={<CompanyRegister />} />
+      <Route path="/user/register" element={<UserRegister />} />
+      <Route path="/institution/register" element={<InstitutionRegister />} />
     </Routes>
   );
 }
