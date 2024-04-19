@@ -34,7 +34,7 @@ institutionRouter.post(
   wrapAsync(async (req, res) => {
     let { password } = req.body;
     let hashedPassword = passwordHash.generate(password);
-    let findInsti = Institution.findOne({ instname: req.body.instname });
+    let findInsti = await Institution.findOne({ instname: req.body.instname });
     if (findInsti != null) {
       let newData = new Institution({
         name: req.body.name,
