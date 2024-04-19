@@ -6,6 +6,9 @@ import PreLogin from "../PreLogin";
 import CompanyRegister from "../CompanyRegister";
 import UserRegister from "../UserRegister";
 import InstitutionRegister from "../InstitutionRegister";
+import CompanyLogin from "../CompanyLogin";
+import UserLogin from "../UserLogin";
+import InstitutionLogin from "../InstitutionLogin";
 
 export default function AllRoutes() {
   return (
@@ -15,6 +18,9 @@ export default function AllRoutes() {
       <Route path="/company/register" element={<CompanyRegister />} />
       <Route path="/user/register" element={<UserRegister />} />
       <Route path="/institution/register" element={<InstitutionRegister />} />
+      <Route path="/company/login" element={<CompanyLogin />} />
+      <Route path="/user/login" element={<UserLogin />} />
+      <Route path="/institution/login" element={<InstitutionLogin />} />
     </Routes>
   );
 }
