@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /* color: white; */
+  font-family: "Figtree", sans-serif;
+}
+#container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #242424;
+}
+.nav-parent {
+  color: white;
+  width: 100%;
+  background: #1d1d1d98;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 2vmin 6vmin;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+}
+
+.home-parent {
+  color: white;
+  padding: 2vmin;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3vmin;
+}
+.footer-parent {
+  color: white;
+  width: 100%;
+  background-color: #1d1d1d;
+  padding: 4vmin;
+  display: flex;
+  justify-content: center;
+}
+.prelogin {
+  color: white;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5vmin;
+  padding: 4vmin;
+}
+.form-parent {
+  flex: 1;
+  padding: 5vmin 10vmin;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+}
+.form-box{
+  display: flex;
+  gap: 3vmin;
+  background: rgba(50, 50, 50, 0.25);
+  box-shadow: 0 0px 12px 0 #8b3bf328;
+  backdrop-filter: blur( 4px );
+  -webkit-backdrop-filter: blur( 4px );
+  border-radius: 10px;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30vw;
+  padding: 2vmin;
+  border-radius: 10px;
+  gap: 2vmin;
+}
+.err {
+  color: red;
+  font-size: 1.5vmin;
+  margin-top: 0.5vmin;
+}
+@media (max-width:800px) {
+  .form{
+    width: 60vw;
+  }
+}
