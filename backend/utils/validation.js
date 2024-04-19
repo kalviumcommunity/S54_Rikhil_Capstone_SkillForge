@@ -8,24 +8,26 @@ exports.userValidation = Joi.object({
     .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$"))
     .required(),
   contact: Joi.object({
-    email: Joi.string()
-      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-      .required(),
+    email: Joi.string().email().required(),
     phone: Joi.number().integer().min(1111111111).max(9999999999).required(),
   }).required(),
 });
 
 exports.companyValidation = Joi.object({
   name: Joi.string().required(),
-  address: Joi.string().required(),
+  orgname: Joi.string().required(),
   password: Joi.string()
     .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$"))
     .required(),
   contact: Joi.object({
-    email: Joi.string().email({ minDomainSegments: 2 }).required(),
-    phone: Joi.number().integer().min(1111111111).max(9999999999).required(),
+    email: Joi.string().email().required(),
+    phone: Joi.number().required(),
   }).required(),
-  website: Joi.string().required(),
+  website: Joi.string()
+    .regex(
+      /^https:\/\/(?:www\.)?[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}(?:\/[a-zA-Z0-9\-._~:/?#[\]@!$&'()*+,;=%]*)?$/
+    )
+    .required(),
 }).required();
 
 exports.taskValidation = Joi.object({
@@ -36,14 +38,15 @@ exports.taskValidation = Joi.object({
 
 exports.institutionValidation = Joi.object({
   name: Joi.string().required(),
+  instname: Joi.string().required(),
   password: Joi.string()
     .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$"))
     .required(),
   description: Joi.string().required(),
-  address: Joi.string().required(),
+  logo: Joi.string().required(),
   contact: Joi.object({
-    email: Joi.string().email({ minDomainSegments: 2 }).required(),
-    phone: Joi.number().integer().min(1111111111).max(9999999999),
+    email: Joi.string().email().required(),
+    phone: Joi.number().integer(),
   }).required(),
 });
 

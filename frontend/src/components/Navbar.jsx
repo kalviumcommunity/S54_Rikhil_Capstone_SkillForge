@@ -8,7 +8,7 @@ import {
   MenuList,
   Text,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IoIosLogIn } from "react-icons/io";
 import { AiOutlineLogin } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -16,9 +16,14 @@ import { FaQuestion } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import { SiGoogletasks } from "react-icons/si";
+import { AppContext } from "./Context";
+import { CiLogout } from "react-icons/ci";
+import { deleteCookie } from "../utils/cookie";
+import { loginCheck } from "../utils/loginCheck";
 
 export default function Navbar() {
   const [isMobile, setIsMobile] = useState(false);
+  const { login, setLogin } = useContext(AppContext);
   useEffect(() => {
     function handleResize() {
       setIsMobile(window.innerWidth < 800);
@@ -29,6 +34,40 @@ export default function Navbar() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+  const logout = () => {
+    deleteCookie("auth-token");
+    deleteCookie("type");
+    location.reload();
+    setLogin(loginCheck())
+  };
+  const renderLoginBtn = () => {
+    if (login) {
+      return (
+        <Button
+          leftIcon={<CiLogout />}
+          colorScheme="purple"
+          color={"white"}
+          size={["xs", "sm", "md"]}
+          onClick={logout}
+        >
+          Logout
+        </Button>
+      );
+    } else {
+      return(
+        <Link to={"/prelogin"}>
+        <Button
+          leftIcon={<IoIosLogIn />}
+          colorScheme="purple"
+          color={"white"}
+          size={["xs", "sm", "md"]}
+        >
+          Login
+        </Button>
+      </Link>
+      )
+    }
+  };
   return (
     <div className="nav-parent">
       <Link to={"/"}>
@@ -49,7 +88,9 @@ export default function Navbar() {
               <MenuItem icon={<FaHome />}>Home</MenuItem>
               <MenuItem icon={<SiGoogletasks />}>Tasks</MenuItem>
               <MenuItem icon={<FaQuestion />}>FAQs</MenuItem>
-              <MenuItem icon={<IoIosLogIn />}>Login</MenuItem>
+              <Link to={"/prelogin"}>
+                <MenuItem icon={<IoIosLogIn />}>Login</MenuItem>
+              </Link>
             </MenuList>
           </Menu>
         </>
@@ -66,16 +107,7 @@ export default function Navbar() {
               <Text className="2vmin">FAQs</Text>
             </Link>
           </HStack>
-          <Link to={'/prelogin'}>
-            <Button
-              leftIcon={<IoIosLogIn />}
-              colorScheme="purple"
-              color={"white"}
-              size={["xs", "sm", "md"]}
-            >
-              Login
-            </Button>
-          </Link>
+          {renderLoginBtn()}
         </>
       )}
     </div>

@@ -5,13 +5,14 @@ const companySchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique:true
+    unique: true,
   },
-  password: {
+  orgname: {
     type: String,
     required: true,
+    unique: true,
   },
-  address: {
+  password: {
     type: String,
     required: true,
   },

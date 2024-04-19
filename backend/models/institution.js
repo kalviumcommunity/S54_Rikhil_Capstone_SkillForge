@@ -6,6 +6,11 @@ const instituionsSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  instname: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   password: {
     type: String,
     required: true,
@@ -14,7 +19,7 @@ const instituionsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  address: {
+  logo: {
     type: String,
     required: true,
   },
