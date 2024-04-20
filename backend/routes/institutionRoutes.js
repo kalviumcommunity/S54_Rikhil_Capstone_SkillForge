@@ -87,7 +87,7 @@ institutionRouter.post(
         throw new ExpressError(401, "Wrong Password!");
       }
     } else {
-      throw new ExpressError(404, "Company Name not found!");
+      throw new ExpressError(404, "Institution Name not found!");
     }
   })
 );
