@@ -20,6 +20,36 @@ const validateCompany = (req, res, next) => {
   }
 };
 
+const extractName = (req, res, next) => {
+  try {
+    let { authorization } = req.headers;
+    let result = jwt.verify(authorization, process.env.JWT_PASS);
+    if (result.type == "Company") {
+      req.body.orgname = result.data.orgname;
+      next();
+    } else {
+      throw new ExpressError(
+        403,
+        "Not authorised to access this route without correct auth token"
+      );
+    }
+  } catch (err) {
+    throw new ExpressError(
+      403,
+      "Not authorised to access this route without correct auth token"
+    );
+  }
+};
+
+companyRouter.get(
+  "/one",
+  extractName,
+  wrapAsync(async (req, res) => {
+    let result = await Company.findOne({ orgname: req.body.orgname });
+    res.send(result);
+  })
+);
+
 companyRouter.post(
   "/signup",
   validateCompany,

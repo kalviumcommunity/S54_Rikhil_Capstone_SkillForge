@@ -9,6 +9,7 @@ import InstitutionRegister from "../InstitutionRegister";
 import CompanyLogin from "../CompanyLogin";
 import UserLogin from "../UserLogin";
 import InstitutionLogin from "../InstitutionLogin";
+import CompanyDashboard from "../CompanyDashboard";
 
 export default function AllRoutes() {
   return (
@@ -21,6 +22,7 @@ export default function AllRoutes() {
       <Route path="/company/login" element={<CompanyLogin />} />
       <Route path="/user/login" element={<UserLogin />} />
       <Route path="/institution/login" element={<InstitutionLogin />} />
+      <Route path="/company/dashboard" element={<CompanyDashboard />} />
     </Routes>
   );
 }
