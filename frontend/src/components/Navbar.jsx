@@ -20,10 +20,14 @@ import { AppContext } from "./Context";
 import { CiLogout } from "react-icons/ci";
 import { deleteCookie } from "../utils/cookie";
 import { loginCheck } from "../utils/loginCheck";
+import { IoIosArrowDown } from "react-icons/io";
+import { MdSpaceDashboard } from "react-icons/md";
+import { MdCorporateFare } from "react-icons/md";
+import { FaUniversity } from "react-icons/fa";
 
 export default function Navbar() {
   const [isMobile, setIsMobile] = useState(false);
-  const { login, setLogin } = useContext(AppContext);
+  const { login, setLogin, userType, setUserType } = useContext(AppContext);
   useEffect(() => {
     function handleResize() {
       setIsMobile(window.innerWidth < 800);
@@ -38,7 +42,7 @@ export default function Navbar() {
     deleteCookie("auth-token");
     deleteCookie("type");
     location.reload();
-    setLogin(loginCheck())
+    setLogin(loginCheck());
   };
   const renderLoginBtn = () => {
     if (login) {
@@ -54,18 +58,45 @@ export default function Navbar() {
         </Button>
       );
     } else {
-      return(
+      return (
         <Link to={"/prelogin"}>
-        <Button
-          leftIcon={<IoIosLogIn />}
-          colorScheme="purple"
-          color={"white"}
-          size={["xs", "sm", "md"]}
-        >
-          Login
-        </Button>
-      </Link>
-      )
+          <Button
+            leftIcon={<IoIosLogIn />}
+            colorScheme="purple"
+            color={"white"}
+            size={["xs", "sm", "md"]}
+          >
+            Login
+          </Button>
+        </Link>
+      );
+    }
+  };
+  const mainMenuOptions = () => {
+    if (userType == "User") {
+      return (
+        <>
+          <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
+          <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem>
+          <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem>
+        </>
+      );
+    } else if (userType == "Company") {
+      return (
+        <>
+          <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
+          <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem>
+          {/* <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem> */}
+        </>
+      );
+    }else if (userType=="Institution"){
+      return (
+        <>
+          <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
+          {/* <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem> */}
+          <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem>
+        </>
+      );
     }
   };
   return (
@@ -100,9 +131,16 @@ export default function Navbar() {
             <Link>
               <Text className="2vmin">Home</Text>
             </Link>
-            <Link>
-              <Text className="2vmin">Tasks</Text>
-            </Link>
+            <Menu>
+              <MenuButton
+                as={Button}
+                colorScheme="transparent"
+                rightIcon={<IoIosArrowDown />}
+              >
+                Services
+              </MenuButton>
+              <MenuList color={"#8a3bf3"}>{mainMenuOptions()}</MenuList>
+            </Menu>
             <Link>
               <Text className="2vmin">FAQs</Text>
             </Link>

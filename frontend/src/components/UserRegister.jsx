@@ -20,13 +20,13 @@ import axios from "axios";
 import img from "../assets/LoginImage.png";
 import { setCookie } from "../utils/cookie";
 import { AppContext } from "./Context";
-import { loginCheck } from "../utils/loginCheck";
+import { loginCheck, typeCheck } from "../utils/loginCheck";
 
 export default function UserRegister() {
   document.title = "SkillForge - User Register";
   const navigate = useNavigate();
   const [data, setData] = useState([]);
-  const { setLogin } = useContext(AppContext);
+  const { setLogin, setUserType } = useContext(AppContext);
   const {
     register,
     handleSubmit,
@@ -59,6 +59,7 @@ export default function UserRegister() {
           setCookie("auth-token", res.data, 10);
           setCookie("type", "User", 10);
           setLogin(loginCheck());
+          setUserType(typeCheck());
           toast.update(toastIdRef.current, {
             title: `Signed Up`,
             status: "success",

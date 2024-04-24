@@ -17,13 +17,13 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import img from "../assets/InstitutionLoginImage.png";
 import { setCookie } from "../utils/cookie";
-import { loginCheck } from "../utils/loginCheck";
+import { loginCheck, typeCheck } from "../utils/loginCheck";
 import { AppContext } from "./Context";
 
 export default function InstitutionRegister() {
   document.title = "SkillForge - Institution Register";
   const navigate = useNavigate();
-  const { setLogin } = useContext(AppContext);
+  const { setLogin , setUserType } = useContext(AppContext);
   document.title = "SkillForge - Institution Registeration";
   const {
     register,
@@ -47,6 +47,7 @@ export default function InstitutionRegister() {
           setCookie("auth-token", res.data, 10);
           setCookie("type", "Institution", 10);
           setLogin(loginCheck());
+          setUserType(typeCheck())
           toast.update(toastIdRef.current, {
             title: `Signed Up`,
             status: "success",

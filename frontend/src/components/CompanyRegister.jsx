@@ -18,13 +18,13 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import img from "../assets/CompanyLoginImage.png";
 import { setCookie } from "../utils/cookie";
-import { loginCheck } from "../utils/loginCheck";
+import { loginCheck, typeCheck } from "../utils/loginCheck";
 import { AppContext } from "./Context";
 
 export default function CompanyRegister() {
   document.title = "SkillForge - Company Register";
   const navigate = useNavigate();
-  const { setLogin } = useContext(AppContext);
+  const { setLogin , setUserType } = useContext(AppContext);
   const {
     register,
     handleSubmit,
@@ -47,6 +47,7 @@ export default function CompanyRegister() {
           setCookie("auth-token", res.data, 10);
           setCookie("type", "Company", 10);
           setLogin(loginCheck());
+          setUserType(typeCheck())
           toast.update(toastIdRef.current, {
             title: `Signed Up`,
             status: "success",
