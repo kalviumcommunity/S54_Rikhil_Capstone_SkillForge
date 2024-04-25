@@ -1,7 +1,18 @@
-import { HStack, Heading, MenuItem, Text, VStack } from "@chakra-ui/react";
+import {
+  HStack,
+  Heading,
+  MenuItem,
+  Stack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { getCookie } from "../utils/cookie";
+import { FaArrowDown } from "react-icons/fa";
+import { ImProfile } from "react-icons/im";
+import { GoGraph } from "react-icons/go";
+import { MdOutlinePublish } from "react-icons/md";
 
 export default function CompanyDashboard() {
   const [greeting, setGreeting] = useState("");
@@ -35,31 +46,83 @@ export default function CompanyDashboard() {
   return (
     <>
       {Object.keys(data).length == 0 ? (
-        <div className="loading">Loading</div>
+        <div style={{ flex: 1 }} className="loading">
+          Loading
+        </div>
       ) : (
         <div className="dashboard-parent">
-          <HStack
-            justifyContent={"space-between"}
-            alignItems={"flex-start"}
-            gap={"15vmax"}
-          >
-            <VStack align={"flex-start"}>
-              <VStack gap={"4vmin"} alignItems={"flex-start"}>
-                <Heading fontSize={"2.5vmax"}>{greeting}</Heading>
-                <VStack gap={"2vmin"} alignItems={"flex-start"}>
-                  <Heading fontSize={"1.5vmax"}>Your Profile</Heading>
-                  <VStack alignItems={"flex-start"}>
-                    <ul>
-                      <Text>{data.name}</Text>
-                      <Text>{data.website}</Text>
-                      <Text>{data.contact.phone}</Text>
-                      <Text>{data.contact.email}</Text>
-                    </ul>
-                  </VStack>
+          <Stack flexDirection={"row"} alignItems={"flex-start"} gap={"7vmax"}>
+            <VStack
+              width={"30%"}
+              className="left-dashboard"
+              gap={"1vmin"}
+              // alignItems={"flex-start"}
+            >
+              <Heading fontSize={"2.5vmax"}>{greeting}</Heading>
+              <VStack width={"100%"} alignItems={"flex-start"} gap={"2.5vmin"}>
+                <Text
+                  as={"b"}
+                  alignSelf={"center"}
+                  color={"grey"}
+                  fontSize={"3vmin"}
+                >
+                  {data.name}
+                </Text>
+                <VStack width={"100%"} alignItems={"flex-start"}>
+                  <Text
+                    alignSelf={"center"}
+                    display={"flex"}
+                    alignItems={"center"}
+                    gap={"1vmin"}
+                    as={"b"}
+                    color={"white"}
+                    fontSize={"2vmin"}
+                  >
+                    Quick Actions {<FaArrowDown />}
+                  </Text>
+                  <HStack
+                    justifyContent={"center"}
+                    gap={"2vmin"}
+                    flexWrap={"wrap"}
+                  >
+                    <Text
+                      cursor={"pointer"}
+                      display={"flex"}
+                      alignItems={"center"}
+                      gap={"1vmin"}
+                      as={"b"}
+                      color={"gray"}
+                      fontSize={"2vmin"}
+                    >
+                      {<ImProfile />} Edit Profile
+                    </Text>
+                    <Text
+                      cursor={"pointer"}
+                      display={"flex"}
+                      alignItems={"center"}
+                      gap={"1vmin"}
+                      as={"b"}
+                      color={"gray"}
+                      fontSize={"2vmin"}
+                    >
+                      {<GoGraph />} Promote Tasks
+                    </Text>
+                    <Text
+                      cursor={"pointer"}
+                      display={"flex"}
+                      alignItems={"center"}
+                      gap={"1vmin"}
+                      as={"b"}
+                      color={"gray"}
+                      fontSize={"2vmin"}
+                    >
+                      {<MdOutlinePublish />} New Task
+                    </Text>
+                  </HStack>
                 </VStack>
               </VStack>
             </VStack>
-            <VStack flex={1} gap={"4vmin"}>
+            <VStack className="right-dashboard" flex={1} gap={"4vmin"}>
               <VStack>
                 <Heading fontSize={"2vmax"}>Tasks Published</Heading>
               </VStack>
@@ -67,7 +130,7 @@ export default function CompanyDashboard() {
                 <Heading fontSize={"2vmax"}>Submissions Received</Heading>
               </VStack>
             </VStack>
-          </HStack>
+          </Stack>
         </div>
       )}
     </>

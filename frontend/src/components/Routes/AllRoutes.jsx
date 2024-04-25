@@ -10,6 +10,8 @@ import CompanyLogin from "../CompanyLogin";
 import UserLogin from "../UserLogin";
 import InstitutionLogin from "../InstitutionLogin";
 import CompanyDashboard from "../CompanyDashboard";
+import { Login, OnlyCompany } from "./PrivateRoutes";
+import NewTask from "../NewTask";
 
 export default function AllRoutes() {
   return (
@@ -22,7 +24,26 @@ export default function AllRoutes() {
       <Route path="/company/login" element={<CompanyLogin />} />
       <Route path="/user/login" element={<UserLogin />} />
       <Route path="/institution/login" element={<InstitutionLogin />} />
-      <Route path="/company/dashboard" element={<CompanyDashboard />} />
+      <Route
+        path="/company/dashboard"
+        element={
+          <Login>
+            <OnlyCompany>
+              <CompanyDashboard />
+            </OnlyCompany>
+          </Login>
+        }
+      />
+      <Route
+        path="/new/task"
+        element={
+          <Login>
+            <OnlyCompany>
+              <NewTask />
+            </OnlyCompany>
+          </Login>
+        }
+      />
     </Routes>
   );
 }
