@@ -90,6 +90,18 @@
   font-size: 1.5vmin;
   margin-top: 0.5vmin;
 }
+.dashboard-parent{
+  flex: 1;
+  color: white;
+  padding: 7vmin 10vmin;
+}
+.left-dashboard , .right-dashboard{
+  padding: 3vmin;
+  background: #1a1a1a98;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+}
 @media (max-width:800px) {
   .form{
     width: 80vw;

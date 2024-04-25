@@ -84,12 +84,14 @@ export default function Navbar() {
     } else if (userType == "Company") {
       return (
         <>
-          <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
+          <Link to={"/company/dashboard"}>
+            <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
+          </Link>
           <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem>
           {/* <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem> */}
         </>
       );
-    }else if (userType=="Institution"){
+    } else if (userType == "Institution") {
       return (
         <>
           <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
