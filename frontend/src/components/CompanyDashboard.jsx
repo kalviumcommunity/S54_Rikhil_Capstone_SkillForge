@@ -13,6 +13,7 @@ import { FaArrowDown } from "react-icons/fa";
 import { ImProfile } from "react-icons/im";
 import { GoGraph } from "react-icons/go";
 import { MdOutlinePublish } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 export default function CompanyDashboard() {
   const [greeting, setGreeting] = useState("");
@@ -32,21 +33,24 @@ export default function CompanyDashboard() {
   }
   useEffect(greetByTime, []);
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/company/one", {
-        headers: { Authorization: authToken },
-      })
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    setTimeout(() => {
+      axios
+        .get("http://localhost:8080/company/one", {
+          headers: { Authorization: authToken },
+        })
+        .then((res) => {
+          console.log(res.data);
+          setData(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, 1000);
   }, []);
   return (
     <>
       {Object.keys(data).length == 0 ? (
-        <div style={{ flex: 1 }} className="loading">
+        <div style={{ flex: 1, color: "white" }} className="loading">
           Loading
         </div>
       ) : (
@@ -107,17 +111,19 @@ export default function CompanyDashboard() {
                     >
                       {<GoGraph />} Promote Tasks
                     </Text>
-                    <Text
-                      cursor={"pointer"}
-                      display={"flex"}
-                      alignItems={"center"}
-                      gap={"1vmin"}
-                      as={"b"}
-                      color={"gray"}
-                      fontSize={"2vmin"}
-                    >
-                      {<MdOutlinePublish />} New Task
-                    </Text>
+                    <Link to={"/new/task"}>
+                      <Text
+                        cursor={"pointer"}
+                        display={"flex"}
+                        alignItems={"center"}
+                        gap={"1vmin"}
+                        as={"b"}
+                        color={"gray"}
+                        fontSize={"2vmin"}
+                      >
+                        {<MdOutlinePublish />} New Task
+                      </Text>
+                    </Link>
                   </HStack>
                 </VStack>
               </VStack>

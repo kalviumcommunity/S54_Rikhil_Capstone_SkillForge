@@ -33,6 +33,8 @@ exports.companyValidation = Joi.object({
 exports.taskValidation = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().required(),
+  company: Joi.string().required(),
+  deadline: Joi.date().required(),
   bounty: Joi.number().required(),
 });
 
