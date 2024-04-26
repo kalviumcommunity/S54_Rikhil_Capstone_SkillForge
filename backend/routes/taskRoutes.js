@@ -21,7 +21,7 @@ const jwtVerify = (req, res, next) => {
   try {
     let { authorization } = req.headers;
     let result = jwt.verify(authorization, process.env.JWT_PASS);
-    // console.log(result.username);
+    req.body.company = result.data.orgname;
     next();
   } catch (err) {
     throw new ExpressError(
@@ -31,22 +31,27 @@ const jwtVerify = (req, res, next) => {
   }
 };
 
-taskRouter.get("/all",wrapAsync(async(req,res)=>{
-    let findTasks = await Task.find({})
-    res.send(findTasks)
-}));
+taskRouter.get(
+  "/all",
+  wrapAsync(async (req, res) => {
+    let findTasks = await Task.find({});
+    res.send(findTasks);
+  })
+);
 
 taskRouter.post(
   "/new",
+  jwtVerify,
   validateTask,
   wrapAsync(async (req, res) => {
-    let { title, description, bounty, company } = req.body;
-    let companyFind = await Company.findOne({ name: company });
+    let { title, description, bounty, deadline, company } = req.body;
+    let companyFind = await Company.findOne({ orgname: company });
     if (companyFind != null) {
       let newTask = new Task({
         title: title,
         description: description,
         bounty: bounty,
+        deadline: deadline,
         company: companyFind,
       });
       await newTask.save();
