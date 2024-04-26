@@ -38,7 +38,6 @@ export default function NewTask() {
   const authToken = getCookie("auth-token");
   
   const FormSubmitHandler = (data) => {
-    console.log(data);
     toastIdRef.current = toast({
       title: `Uploading Task`,
       status: "loading",

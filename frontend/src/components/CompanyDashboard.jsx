@@ -39,7 +39,6 @@ export default function CompanyDashboard() {
           headers: { Authorization: authToken },
         })
         .then((res) => {
-          console.log(res.data);
           setData(res.data);
         })
         .catch((err) => {
