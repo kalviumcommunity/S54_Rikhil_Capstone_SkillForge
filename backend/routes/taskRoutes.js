@@ -21,8 +21,15 @@ const jwtVerify = (req, res, next) => {
   try {
     let { authorization } = req.headers;
     let result = jwt.verify(authorization, process.env.JWT_PASS);
-    req.body.company = result.data.orgname;
-    next();
+    if (result.type == "Company") {
+      req.body.company = result.data.orgname;
+      next();
+    } else {
+      throw new ExpressError(
+        403,
+        "Not authorised to access this route without correct auth token"
+      );
+    }
   } catch (err) {
     throw new ExpressError(
       403,
