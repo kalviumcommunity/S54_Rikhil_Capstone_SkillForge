@@ -73,10 +73,12 @@ export default function Navbar() {
     }
   };
   const mainMenuOptions = () => {
-    if (userType == "User") {
+    if (userType == "Student") {
       return (
         <>
-          <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
+          <Link to={"/user/dashboard"}>
+            <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
+          </Link>
           <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem>
           <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem>
         </>

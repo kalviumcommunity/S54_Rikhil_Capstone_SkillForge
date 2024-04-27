@@ -11,8 +11,8 @@ export function loginCheck() {
 
 export function typeCheck() {
   let type = getCookie("type");
-  if (type == "User") {
-    return "User";
+  if (type == "Student") {
+    return "Student";
   } else if (type == "Company") {
     return "Company";
   } else if (type == "Institution") {

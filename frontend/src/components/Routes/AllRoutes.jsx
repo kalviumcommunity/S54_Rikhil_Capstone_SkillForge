@@ -10,8 +10,9 @@ import CompanyLogin from "../CompanyLogin";
 import UserLogin from "../UserLogin";
 import InstitutionLogin from "../InstitutionLogin";
 import CompanyDashboard from "../CompanyDashboard";
-import { Login, OnlyCompany } from "./PrivateRoutes";
+import { Login, OnlyCompany, OnlyUser } from "./PrivateRoutes";
 import NewTask from "../NewTask";
+import UserDashboard from "../UserDashboard";
 
 export default function AllRoutes() {
   return (
@@ -31,6 +32,16 @@ export default function AllRoutes() {
             <OnlyCompany>
               <CompanyDashboard />
             </OnlyCompany>
+          </Login>
+        }
+      />
+      <Route
+        path="/user/dashboard"
+        element={
+          <Login>
+            <OnlyUser>
+              <UserDashboard />
+            </OnlyUser>
           </Login>
         }
       />

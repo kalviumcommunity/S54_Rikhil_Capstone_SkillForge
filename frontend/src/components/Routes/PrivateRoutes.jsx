@@ -42,3 +42,23 @@ export const OnlyCompany = ({ children }) => {
 
   return <>{children}</>;
 };
+
+export const OnlyUser = ({ children }) => {
+  const navigate = useNavigate();
+  const { userType, setUserType } = useContext(AppContext);
+  const toast = useToast();
+  useEffect(() => {
+    if (userType != "Student") {
+      toast({
+        title: "Not Authorized",
+        description: "Sign-Up/Login as User to access that page!",
+        status: "error",
+        duration: 4000,
+        isClosable: false,
+      });
+      navigate("/user/register");
+    }
+  }, []);
+
+  return <>{children}</>;
+};
