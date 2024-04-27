@@ -20,6 +20,36 @@ const validateUser = (req, res, next) => {
   }
 };
 
+const extractName = (req, res, next) => {
+  try {
+    let { authorization } = req.headers;
+    let result = jwt.verify(authorization, process.env.JWT_PASS);
+    if (result.type == "Student") {
+      req.body.username = result.data.username;
+      next();
+    } else {
+      throw new ExpressError(
+        403,
+        "Not authorised to access this route without correct auth token"
+      );
+    }
+  } catch (err) {
+    throw new ExpressError(
+      403,
+      "Not authorised to access this route without correct auth token"
+    );
+  }
+};
+
+userRouter.get(
+  "/one",
+  extractName,
+  wrapAsync(async (req, res) => {
+    let result = await User.findOne({ username: req.body.username });
+    res.send(result);
+  })
+);
+
 userRouter.post(
   "/signup",
   validateUser,

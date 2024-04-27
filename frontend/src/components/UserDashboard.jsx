@@ -16,7 +16,7 @@ import { GoGraph } from "react-icons/go";
 import { MdOutlinePublish } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-export default function CompanyDashboard() {
+export default function UserDashboard() {
   const [greeting, setGreeting] = useState("");
   const [data, setData] = useState({});
   const authToken = getCookie("auth-token");
@@ -36,7 +36,7 @@ export default function CompanyDashboard() {
   useEffect(() => {
     setTimeout(() => {
       axios
-        .get("http://localhost:8080/company/one", {
+        .get("http://localhost:8080/users/one", {
           headers: { Authorization: authToken },
         })
         .then((res) => {
@@ -93,14 +93,14 @@ export default function CompanyDashboard() {
                   </Text>
                   <HStack
                     justifyContent={"center"}
-                    gap={'1.5vmin'}
+                    gap={"1.5vmin"}
                     flexWrap={"wrap"}
                   >
                     <Text
                       cursor={"pointer"}
                       display={"flex"}
                       alignItems={"center"}
-                      gap={"1vmin"}
+                      gap={"0.5vmin"}
                       as={"b"}
                       color={"gray"}
                       fontSize={"2vmin"}
@@ -111,26 +111,35 @@ export default function CompanyDashboard() {
                       cursor={"pointer"}
                       display={"flex"}
                       alignItems={"center"}
-                      gap={"1vmin"}
+                      gap={"0.5vmin"}
                       as={"b"}
                       color={"gray"}
                       fontSize={"2vmin"}
                     >
-                      {<GoGraph />} Promote Tasks
+                      {<ImProfile />} Leaderboard
                     </Text>
-                    <Link to={"/new/task"}>
-                      <Text
-                        cursor={"pointer"}
-                        display={"flex"}
-                        alignItems={"center"}
-                        gap={"1vmin"}
-                        as={"b"}
-                        color={"gray"}
-                        fontSize={"2vmin"}
-                      >
-                        {<MdOutlinePublish />} New Task
-                      </Text>
-                    </Link>
+                    <Text
+                      cursor={"pointer"}
+                      display={"flex"}
+                      alignItems={"center"}
+                      gap={"0.5vmin"}
+                      as={"b"}
+                      color={"gray"}
+                      fontSize={"2vmin"}
+                    >
+                      {<ImProfile />} Explore Tasks
+                    </Text>
+                    <Text
+                      cursor={"pointer"}
+                      display={"flex"}
+                      alignItems={"center"}
+                      gap={"0.5vmin"}
+                      as={"b"}
+                      color={"gray"}
+                      fontSize={"2vmin"}
+                    >
+                      {<ImProfile />} Make a Submission
+                    </Text>
                   </HStack>
                 </VStack>
               </VStack>
@@ -143,15 +152,19 @@ export default function CompanyDashboard() {
               gap={"4vmin"}
             >
               <VStack width={"100%"}>
-                <Heading fontSize={"2vmax"}>Tasks Published</Heading>
-                <HStack className="published-tasks" overflowX={"scroll"} width={"inherit"}>
+                <Heading fontSize={"2vmax"}>Enrolled Tasks</Heading>
+                <HStack
+                  className="published-tasks"
+                  overflowX={"scroll"}
+                  width={"inherit"}
+                >
                   <Box border={"1px solid purple"} p={"2vmin"}>
                     Hello
                   </Box>
                 </HStack>
               </VStack>
               <VStack>
-                <Heading fontSize={"2vmax"}>Submissions Received</Heading>
+                <Heading fontSize={"2vmax"}>Submissions Made</Heading>
               </VStack>
             </VStack>
           </Stack>

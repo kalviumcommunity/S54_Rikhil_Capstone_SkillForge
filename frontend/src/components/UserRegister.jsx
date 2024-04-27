@@ -57,7 +57,7 @@ export default function UserRegister() {
         .post("http://localhost:8080/users/signup", data)
         .then((res) => {
           setCookie("auth-token", res.data, 10);
-          setCookie("type", "User", 10);
+          setCookie("type", "Student", 10);
           setLogin(loginCheck());
           setUserType(typeCheck());
           toast.update(toastIdRef.current, {
