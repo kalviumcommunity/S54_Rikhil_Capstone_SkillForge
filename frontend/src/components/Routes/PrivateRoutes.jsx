@@ -51,7 +51,7 @@ export const OnlyUser = ({ children }) => {
     if (userType != "Student") {
       toast({
         title: "Not Authorized",
-        description: "Sign-Up/Login as User to access that page!",
+        description: "Sign-Up/Login as Student to access that page!",
         status: "error",
         duration: 4000,
         isClosable: false,
