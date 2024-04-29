@@ -41,8 +41,16 @@ const jwtVerify = (req, res, next) => {
 taskRouter.get(
   "/all",
   wrapAsync(async (req, res) => {
-    let findTasks = await Task.find({});
+    let findTasks = await Task.find({}).populate("company");
     res.send(findTasks);
+  })
+);
+taskRouter.get(
+  "/one/:id",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    let result = await Task.findById(id).populate("company");
+    res.send(result);
   })
 );
 
@@ -51,14 +59,16 @@ taskRouter.post(
   jwtVerify,
   validateTask,
   wrapAsync(async (req, res) => {
-    let { title, description, bounty, deadline, company } = req.body;
+    let { title, description, bounty, deadline, company, skills } = req.body;
     let companyFind = await Company.findOne({ orgname: company });
     if (companyFind != null) {
+      let skillsArr = skills.split(",");
       let newTask = new Task({
         title: title,
         description: description,
         bounty: bounty,
         deadline: deadline,
+        skills: skillsArr,
         company: companyFind,
       });
       await newTask.save();

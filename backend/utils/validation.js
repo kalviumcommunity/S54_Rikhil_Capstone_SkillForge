@@ -35,6 +35,7 @@ exports.taskValidation = Joi.object({
   description: Joi.string().required(),
   company: Joi.string().required(),
   deadline: Joi.date().required(),
+  skills: Joi.string().required(),
   bounty: Joi.number().required(),
 });
 
