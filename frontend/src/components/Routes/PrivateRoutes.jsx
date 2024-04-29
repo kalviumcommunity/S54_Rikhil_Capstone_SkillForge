@@ -62,3 +62,23 @@ export const OnlyUser = ({ children }) => {
 
   return <>{children}</>;
 };
+
+export const UserAndCompany = ({ children }) => {
+  const navigate = useNavigate();
+  const { userType, setUserType } = useContext(AppContext);
+  const toast = useToast();
+  useEffect(() => {
+    if (userType == "Institution") {
+      toast({
+        title: "Not Authorized",
+        description: "Sign-Up/Login as Student or Company to access that page!",
+        status: "error",
+        duration: 4000,
+        isClosable: false,
+      });
+      navigate("/prelogin");
+    }
+  }, []);
+
+  return <>{children}</>;
+};

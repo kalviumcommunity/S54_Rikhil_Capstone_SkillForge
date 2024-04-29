@@ -10,9 +10,11 @@ import CompanyLogin from "../CompanyLogin";
 import UserLogin from "../UserLogin";
 import InstitutionLogin from "../InstitutionLogin";
 import CompanyDashboard from "../CompanyDashboard";
-import { Login, OnlyCompany, OnlyUser } from "./PrivateRoutes";
+import { Login, OnlyCompany, OnlyUser, UserAndCompany } from "./PrivateRoutes";
 import NewTask from "../NewTask";
 import UserDashboard from "../UserDashboard";
+import IndustryTasks from "../IndustryTasks";
+import TaskDetails from "../TaskDetails";
 
 export default function AllRoutes() {
   return (
@@ -55,6 +57,26 @@ export default function AllRoutes() {
           </Login>
         }
       />
+      <Route
+        path="/industry/tasks"
+        element={
+          <Login>
+            <UserAndCompany>
+              <IndustryTasks />
+            </UserAndCompany>
+          </Login>
+        }
+      ></Route>
+      <Route
+        path="/task/details/:id"
+        element={
+          <Login>
+            <UserAndCompany>
+              <TaskDetails />
+            </UserAndCompany>
+          </Login>
+        }
+      ></Route>
     </Routes>
   );
 }

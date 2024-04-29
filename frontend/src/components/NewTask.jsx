@@ -129,6 +129,20 @@ export default function NewTask() {
             />
             <p className="err">{errors.description?.message}</p>
           </FormControl>
+          <FormControl>
+            <FormLabel fontSize="1vmax" as="i" fontWeight="550">
+              Skills
+            </FormLabel>
+            <Input
+            placeholder="Enter comma ',' separated skills req."
+              type="text"
+              borderColor="white"
+              {...register("skills", {
+                required: "Skills are required",
+              })}
+            />
+            <p className="err">{errors.skills?.message}</p>
+          </FormControl>
           <HStack width={"100%"} gap={"1.5vmin"}>
             <FormControl>
               <FormLabel fontSize="1vmax" as="i" fontWeight="550">

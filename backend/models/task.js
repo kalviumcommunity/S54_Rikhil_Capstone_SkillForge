@@ -21,12 +21,12 @@ const taskSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Company",
   },
-  submissions: [
+  skills: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Submission",
+      type: String,
+      required: true,
     },
-  ],
+  ]
 });
 
 const Task = mongoose.model("Task", taskSchema);
