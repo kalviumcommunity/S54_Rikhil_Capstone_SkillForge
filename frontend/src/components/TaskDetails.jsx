@@ -31,6 +31,7 @@ export default function TaskDetails() {
         console.log(err);
       });
   }, []);
+  document.title = 'SkillForge - Task Details'
   return (
     <>
       {Object.keys(data).length == 0 ? (

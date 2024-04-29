@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 export default function IndustryTasks() {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
+  document.title = "SkillForge - Explore Industry Tasks";
   useEffect(() => {
     axios
       .get("http://localhost:8080/tasks/all")
@@ -64,12 +65,17 @@ export default function IndustryTasks() {
                 <Box className="task-box" borderRadius={"10px"} p={"4vmin"}>
                   <VStack justifyContent={"space-between"} height={"100%"}>
                     <VStack width={"100%"} height={"100%"} gap={"2vmin"}>
-                      <Heading fontSize={["1.7vmax","1.7vmax","1.7vmax","1.5vmax"]}>
+                      <Heading
+                        fontSize={["1.7vmax", "1.7vmax", "1.7vmax", "1.5vmax"]}
+                      >
                         {e.title.length > 30
                           ? e.title.substr(0, 30) + "..."
                           : e.title}
                       </Heading>
-                      <Text fontSize={["2.4vmin","2.4vmin","2.4vmin","2vmin"]} color={"#C4C4C4"}>
+                      <Text
+                        fontSize={["2.4vmin", "2.4vmin", "2.4vmin", "2vmin"]}
+                        color={"#C4C4C4"}
+                      >
                         {e.description.length > 200
                           ? e.description.substr(0, 200) + "..."
                           : e.description}
@@ -85,7 +91,7 @@ export default function IndustryTasks() {
                             <>
                               <Tag
                                 flexShrink={0}
-                                size={'sm'}
+                                size={"sm"}
                                 colorScheme="purple"
                               >
                                 {e}
@@ -158,7 +164,7 @@ export default function IndustryTasks() {
                           knowMore(e._id);
                         }}
                         size={["xs", "sm", "md"]}
-                        >
+                      >
                         Know More!
                       </Button>
 
