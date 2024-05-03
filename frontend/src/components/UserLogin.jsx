@@ -58,6 +58,7 @@ export default function UserRegister() {
         .then((res) => {
           setCookie("auth-token", res.data, 10);
           setCookie("type", "Student", 10);
+          setCookie("username", data.username, 10);
           setLogin(loginCheck());
           setUserType(typeCheck());
           toast.update(toastIdRef.current, {

@@ -16,22 +16,41 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CiBag1 } from "react-icons/ci";
 import { MdCorporateFare } from "react-icons/md";
 import { FaRegCalendarCheck } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AppContext } from "./Context";
+import { getCookie } from "../utils/cookie";
 
 export default function IndustryTasks() {
   const [data, setData] = useState([]);
+  const [applicationTaskIDsArr, setApplicationTaskIDArr] = useState([]);
+  const [applications, setApplications] = useState([]);
   const navigate = useNavigate();
   document.title = "SkillForge - Explore Industry Tasks";
+  const authToken = getCookie("auth-token");
+  const currentUsername = getCookie("username");
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/applications/user/particular", {
+        headers: { Authorization: authToken },
+      })
+      .then((res) => {
+        setApplications(res.data);
+        res.data.map((e) => {
+          setApplicationTaskIDArr((prev) => {
+            return [...prev, e.task];
+          });
+        });
+      });
+  }, []);
   useEffect(() => {
     axios
       .get("http://localhost:8080/tasks/all")
       .then((res) => {
         setData(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -39,6 +58,46 @@ export default function IndustryTasks() {
   }, []);
   const knowMore = (id) => {
     navigate(`/task/details/${id}`);
+  };
+  const { userType } = useContext(AppContext);
+  const redirectToApply = (id) => {
+    navigate(`/apply/${id}`);
+  };
+  const RenderButton = ({ id }) => {
+    if (userType == "Student") {
+      // console.log(id)
+      if (applicationTaskIDsArr.includes(id)) {
+        let result = applications.find((obj) => obj["task"] == id);
+        if (result.state != "accepted") {
+          return (
+            <Button isDisabled size={["xs", "sm", "md"]}>
+              Applied ({result.state})
+            </Button>
+          );
+        }
+      } else {
+        return (
+          <Button
+            onClick={() => {
+              redirectToApply(id);
+            }}
+            size={["xs", "sm", "md"]}
+          >
+            Apply for Task
+          </Button>
+        );
+      }
+    } else if (userType == "Company") {
+      if (id == currentUsername) {
+        return <Button size={["xs", "sm", "md"]}>Edit</Button>;
+      } else {
+        return (
+          <Button isDisabled size={["xs", "sm", "md"]}>
+            Edit
+          </Button>
+        );
+      }
+    }
   };
   return (
     <>
@@ -62,7 +121,12 @@ export default function IndustryTasks() {
           >
             {data.map((e, i) => {
               return (
-                <Box className="task-box" borderRadius={"10px"} p={"4vmin"}>
+                <Box
+                  key={i}
+                  className="task-box"
+                  borderRadius={"10px"}
+                  p={"4vmin"}
+                >
                   <VStack justifyContent={"space-between"} height={"100%"}>
                     <VStack width={"100%"} height={"100%"} gap={"2vmin"}>
                       <Heading
@@ -88,15 +152,14 @@ export default function IndustryTasks() {
                       >
                         {e.skills.map((e, i) => {
                           return (
-                            <>
-                              <Tag
-                                flexShrink={0}
-                                size={"sm"}
-                                colorScheme="purple"
-                              >
-                                {e}
-                              </Tag>
-                            </>
+                            <Tag
+                              key={i}
+                              flexShrink={0}
+                              size={"sm"}
+                              colorScheme="purple"
+                            >
+                              {e}
+                            </Tag>
                           );
                         })}
                       </HStack>
@@ -168,7 +231,11 @@ export default function IndustryTasks() {
                         Know More!
                       </Button>
 
-                      <Button size={["xs", "sm", "md"]}>Apply for Task</Button>
+                      {userType == "Student" ? (
+                        <RenderButton id={e._id} />
+                      ) : (
+                        <RenderButton id={e.company.orgname} />
+                      )}
                     </ButtonGroup>
                   </VStack>
                 </Box>

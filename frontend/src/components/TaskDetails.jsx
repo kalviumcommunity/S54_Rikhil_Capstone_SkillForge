@@ -1,5 +1,6 @@
 import {
   Button,
+  ButtonGroup,
   HStack,
   Heading,
   Stat,
@@ -11,31 +12,112 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { CiBag1 } from "react-icons/ci";
 import { MdCorporateFare } from "react-icons/md";
 import { FaRegCalendarCheck } from "react-icons/fa";
+import { getCookie } from "../utils/cookie";
+import { AppContext } from "./Context";
+import { ChakraModal } from "./ChakraModal";
 
 export default function TaskDetails() {
+  const [applicationData, setApplicationData] = useState([]);
   const [data, setData] = useState({});
+  const { userType, setUserType } = useContext(AppContext);
+  const navigate = useNavigate();
   const { id } = useParams();
+  const authToken = getCookie("auth-token");
+  const currentUsername = getCookie("username");
+  const applicationDataFetch = () => {
+    if (userType == "Student") {
+      axios
+        .get(`http://localhost:8080/applications/particular/${id}`, {
+          headers: { Authorization: authToken },
+        })
+        .then((res) => {
+          setApplicationData(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (userType == "Company") {
+      axios
+        .get(`http://localhost:8080/applications/task/particular/${id}`)
+        .then((res) => {
+          setApplicationData(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+  useEffect(applicationDataFetch, []);
   useEffect(() => {
     axios
       .get(`http://localhost:8080/tasks/one/${id}`)
       .then((res) => {
         setData(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-  document.title = 'SkillForge - Task Details'
+  const redirectToApply = (id) => {
+    navigate(`/apply/${id}`);
+  };
+  const renderBtn = () => {
+    if (userType == "Student") {
+      if (Object.keys(applicationData).length > 0) {
+        return (
+          <Button isDisabled colorScheme="purple">
+            Application Status : {applicationData.state.toUpperCase()}
+          </Button>
+        );
+      } else {
+        return (
+          <Button
+            onClick={() => {
+              redirectToApply(data._id);
+            }}
+            colorScheme="purple"
+            size={["xs", "sm", "md"]}
+          >
+            Apply for Task!
+          </Button>
+        );
+      }
+    } else if (userType == "Company") {
+      if (currentUsername == data.company.orgname) {
+        if (applicationData.length == 0) {
+          return (
+            <Button isDisabled colorScheme="purple" size={["xs", "sm", "md"]}>
+              No Applications yet!
+            </Button>
+          );
+        } else {
+          return (
+            <ButtonGroup>
+              <ChakraModal
+                size={"6xl"}
+                buttonContent={"Check Applications"}
+                data={applicationData}
+                fetchData={applicationDataFetch}
+              />
+              <Button isDisabled colorScheme="purple" size={["xs", "sm", "md"]}>
+                View Submissions
+              </Button>
+            </ButtonGroup>
+          );
+        }
+      }
+    }
+  };
+  document.title = "SkillForge - Task Details";
   return (
     <>
       {Object.keys(data).length == 0 ? (
-        ""
+        "Loading"
       ) : (
         <VStack
           gap={"3vmax"}
@@ -119,7 +201,7 @@ export default function TaskDetails() {
               </StatNumber>
             </Stat>
           </StatGroup>
-          <Button colorScheme="purple">Apply for Task!</Button>
+          {renderBtn()}
         </VStack>
       )}
     </>

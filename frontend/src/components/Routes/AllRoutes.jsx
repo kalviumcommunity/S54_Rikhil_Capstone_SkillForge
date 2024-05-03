@@ -15,6 +15,7 @@ import NewTask from "../NewTask";
 import UserDashboard from "../UserDashboard";
 import IndustryTasks from "../IndustryTasks";
 import TaskDetails from "../TaskDetails";
+import ApplyForTask from "../ApplyForTask";
 
 export default function AllRoutes() {
   return (
@@ -77,6 +78,16 @@ export default function AllRoutes() {
           </Login>
         }
       ></Route>
+      <Route
+        path="/apply/:id"
+        element={
+          <Login>
+            <OnlyUser>
+              <ApplyForTask />
+            </OnlyUser>
+          </Login>
+        }
+      />
     </Routes>
   );
 }

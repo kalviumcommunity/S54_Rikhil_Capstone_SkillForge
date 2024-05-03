@@ -60,3 +60,8 @@ exports.eventValidation = Joi.object({
   volunteers: Joi.number().required(),
   institution: Joi.string().required(),
 });
+
+exports.applicationValidation = Joi.object({
+  why: Joi.string().required(),
+  how: Joi.string().required(),
+}).required();
