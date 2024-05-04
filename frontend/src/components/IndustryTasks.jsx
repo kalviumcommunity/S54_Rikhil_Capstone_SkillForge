@@ -74,6 +74,12 @@ export default function IndustryTasks() {
               Applied ({result.state})
             </Button>
           );
+        } else if (result.state == "accepted") {
+          return (
+            <Button isDisabled size={["xs", "sm", "md"]}>
+              Submit
+            </Button>
+          );
         }
       } else {
         return (
@@ -130,7 +136,7 @@ export default function IndustryTasks() {
                   <VStack justifyContent={"space-between"} height={"100%"}>
                     <VStack width={"100%"} height={"100%"} gap={"2vmin"}>
                       <Heading
-                        fontSize={["1.7vmax", "1.7vmax", "1.7vmax", "1.5vmax"]}
+                        fontSize={["2vmax", "2vmax", "2vmax", "1.6vmax"]}
                       >
                         {e.title.length > 30
                           ? e.title.substr(0, 30) + "..."
