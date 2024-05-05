@@ -50,7 +50,11 @@ taskRouter.get(
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let result = await Task.findById(id).populate("company");
-    res.send(result);
+    if (result != null) {
+      res.send(result);
+    } else {
+      throw new ExpressError(404, "Task not found!");
+    }
   })
 );
 
