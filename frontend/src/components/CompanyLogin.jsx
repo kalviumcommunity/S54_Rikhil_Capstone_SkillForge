@@ -46,6 +46,7 @@ export default function CompanyRegister() {
         .then((res) => {
           setCookie("auth-token", res.data, 10);
           setCookie("type", "Company", 10);
+          setCookie("username", data.orgname, 10);
           setLogin(loginCheck());
           setUserType(typeCheck());
           toast.update(toastIdRef.current, {

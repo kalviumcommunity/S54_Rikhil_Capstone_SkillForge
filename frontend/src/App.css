@@ -129,7 +129,14 @@
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.127);
 }
-.task-details-parent{
+.application-box {
+  background: rgba(18, 18, 18, 0.425);
+  /* box-shadow: 0 0 6px #8b3bf328; */
+  backdrop-filter: blur(4.5px);
+  -webkit-backdrop-filter: blur(4.5px);
+  border-radius: 10px;
+}
+.task-details-parent {
   color: white;
   flex: 1;
 }

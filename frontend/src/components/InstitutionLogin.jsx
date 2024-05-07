@@ -46,6 +46,7 @@ export default function InstitutionLogin() {
         .then((res) => {
           setCookie("auth-token", res.data, 10);
           setCookie("type", "Institution", 10);
+          setCookie("username", data.instname, 10);
           setLogin(loginCheck());
           setUserType(typeCheck());
           toast.update(toastIdRef.current, {

@@ -79,7 +79,9 @@ export default function Navbar() {
           <Link to={"/user/dashboard"}>
             <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
           </Link>
-          <Link to={'/industry/tasks'}><MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem></Link>
+          <Link to={"/industry/tasks"}>
+            <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem>
+          </Link>
           <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem>
         </>
       );
@@ -89,7 +91,9 @@ export default function Navbar() {
           <Link to={"/company/dashboard"}>
             <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
           </Link>
-          <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem>
+          <Link to={'/industry/tasks'}>
+            <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem>
+          </Link>
           {/* <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem> */}
         </>
       );
