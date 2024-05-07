@@ -43,7 +43,9 @@ export default function TaskDetails() {
         });
     } else if (userType == "Company") {
       axios
-        .get(`http://localhost:8080/applications/task/particular/${id}`)
+        .get(`http://localhost:8080/applications/task/particular/${id}`, {
+          headers: { Authorization: authToken },
+        })
         .then((res) => {
           setApplicationData(res.data);
         })
@@ -71,14 +73,14 @@ export default function TaskDetails() {
       if (Object.keys(applicationData).length > 0) {
         if (applicationData.state == "accepted") {
           return (
-              <>
-                <Button isDisabled colorScheme="purple">
-                  Application Status : {applicationData.state.toUpperCase()}
-                </Button>
-                <Button isDisabled colorScheme="purple">
-                  Submit
-                </Button>
-              </>
+            <>
+              <Button isDisabled colorScheme="purple">
+                Application Status : {applicationData.state.toUpperCase()}
+              </Button>
+              <Button isDisabled colorScheme="purple">
+                Submit
+              </Button>
+            </>
           );
         }
         return (

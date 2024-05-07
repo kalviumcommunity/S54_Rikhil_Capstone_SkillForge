@@ -91,6 +91,7 @@ applicationRouter.get(
 
 applicationRouter.get(
   "/task/particular/:id",
+  jwtVerify,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let result = await Application.find({ task: id }).populate("user");
