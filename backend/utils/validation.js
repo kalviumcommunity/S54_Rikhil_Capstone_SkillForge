@@ -65,3 +65,8 @@ exports.applicationValidation = Joi.object({
   why: Joi.string().required(),
   how: Joi.string().required(),
 }).required();
+
+exports.submissionValidation = Joi.object({
+  repo: Joi.string().required(),
+  deployed: Joi.string().required(),
+}).required();
