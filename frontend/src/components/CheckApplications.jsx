@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Button,
   VStack,
@@ -17,6 +18,7 @@ import {
   HStack,
   ButtonGroup,
   IconButton,
+  useToast,
 } from "@chakra-ui/react";
 import { IoMdCheckmark } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
@@ -24,29 +26,66 @@ import { getCookie } from "../utils/cookie";
 import { useState } from "react";
 import axios from "axios";
 
-export function ChakraModal({ buttonContent, size, data, fetchData }) {
+export function CheckApplications({ buttonContent, size, data, fetchData }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedState, setSelectedState] = useState("pending");
   const authToken = getCookie("auth-token");
-  console.log(data[0].state);
+  const toast = useToast();
+  const toastIdRef = React.useRef();
   const stateChange = (state, applicationID) => {
-    axios
-      .post(
-        "http://localhost:8080/applications/change/state",
-        {
-          state: state,
-          application: applicationID,
-        },
-        { headers: { Authorization: authToken } }
-      )
-      .then((res) => {
-        console.log(res);
-        fetchData()
-      })
-      .catch((err) => {
-        console.log(err);
+    if (state == "accepted") {
+      toastIdRef.current = toast({
+        title: `Accepting`,
+        status: "loading",
+        isClosable: false,
       });
+    } else if (state == "rejected") {
+      toastIdRef.current = toast({
+        title: `Rejecting`,
+        status: "loading",
+        isClosable: false,
+      });
+    }
+    setTimeout(() => {
+      axios
+        .post(
+          "http://localhost:8080/applications/change/state",
+          {
+            state: state,
+            application: applicationID,
+          },
+          { headers: { Authorization: authToken } }
+        )
+        .then((res) => {
+          console.log(res);
+          if (state == "accepted") {
+            toast.update(toastIdRef.current, {
+              title: `Accepted`,
+              status: "success",
+              isClosable: false,
+            });
+          } else if (state == "rejected") {
+            toast.update(toastIdRef.current, {
+              title: `Rejected`,
+              status: "error",
+              isClosable: false,
+            });
+          }
+          setTimeout(fetchData(), 1000);
+        })
+        .catch((err) => {
+          // console.log(err);
+          toast.update(toastIdRef.current, {
+            title: `Server Error! Contact Admin`,
+            status: "error",
+            isClosable: false,
+          });
+        });
+    }, 1000);
   };
+  let filteredArr = data.filter((e) => {
+    return e.state == selectedState;
+  });
   return (
     <>
       <Button colorScheme="purple" size={["xs", "sm", "md"]} onClick={onOpen}>
@@ -80,11 +119,12 @@ export function ChakraModal({ buttonContent, size, data, fetchData }) {
           <ModalCloseButton color={"white"} />
           <ModalBody color={"white"}>
             <VStack gap={"5vmin"}>
-              {data
-                .filter((e) => {
-                  return e.state == selectedState;
-                })
-                .map((e, i) => {
+              {filteredArr.length == 0 ? (
+                <div style={{ color: "white" }}>
+                  No applications in this category
+                </div>
+              ) : (
+                filteredArr.map((e, i) => {
                   return (
                     <Box className="application-box" key={i} p={"4vmin"}>
                       <VStack gap={"2vmin"}>
@@ -111,26 +151,28 @@ export function ChakraModal({ buttonContent, size, data, fetchData }) {
                           </Text>
                         </>
                         <HStack width={"100%"} justifyContent={"space-between"}>
-                          <ButtonGroup>
-                            <Button
-                              as={IconButton}
-                              size={["xs", "sm", "md"]}
-                              colorScheme="purple"
-                              icon={<IoMdCheckmark />}
-                              onClick={() => {
-                                stateChange("accepted", e._id);
-                              }}
-                            ></Button>
-                            <Button
-                              as={IconButton}
-                              size={["xs", "sm", "md"]}
-                              colorScheme="purple"
-                              icon={<RxCross1 />}
-                              onClick={() => {
-                                stateChange("rejected", e._id);
-                              }}
-                            ></Button>
-                          </ButtonGroup>
+                          {selectedState == "pending" && (
+                            <ButtonGroup>
+                              <Button
+                                as={IconButton}
+                                size={["xs", "sm", "md"]}
+                                colorScheme="purple"
+                                icon={<IoMdCheckmark />}
+                                onClick={() => {
+                                  stateChange("accepted", e._id);
+                                }}
+                              ></Button>
+                              <Button
+                                as={IconButton}
+                                size={["xs", "sm", "md"]}
+                                colorScheme="purple"
+                                icon={<RxCross1 />}
+                                onClick={() => {
+                                  stateChange("rejected", e._id);
+                                }}
+                              ></Button>
+                            </ButtonGroup>
+                          )}
                           <Tag alignSelf={"flex-end"} colorScheme="purple">
                             Application by : {e.user.name}
                           </Tag>
@@ -138,7 +180,8 @@ export function ChakraModal({ buttonContent, size, data, fetchData }) {
                       </VStack>
                     </Box>
                   );
-                })}
+                })
+              )}
             </VStack>
           </ModalBody>
 

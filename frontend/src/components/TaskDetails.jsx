@@ -19,7 +19,7 @@ import { MdCorporateFare } from "react-icons/md";
 import { FaRegCalendarCheck } from "react-icons/fa";
 import { getCookie } from "../utils/cookie";
 import { AppContext } from "./Context";
-import { ChakraModal } from "./ChakraModal";
+import { CheckApplications } from "./CheckApplications";
 
 export default function TaskDetails() {
   const [applicationData, setApplicationData] = useState([]);
@@ -69,6 +69,18 @@ export default function TaskDetails() {
   const renderBtn = () => {
     if (userType == "Student") {
       if (Object.keys(applicationData).length > 0) {
+        if (applicationData.state == "accepted") {
+          return (
+              <>
+                <Button isDisabled colorScheme="purple">
+                  Application Status : {applicationData.state.toUpperCase()}
+                </Button>
+                <Button isDisabled colorScheme="purple">
+                  Submit
+                </Button>
+              </>
+          );
+        }
         return (
           <Button isDisabled colorScheme="purple">
             Application Status : {applicationData.state.toUpperCase()}
@@ -98,7 +110,7 @@ export default function TaskDetails() {
         } else {
           return (
             <ButtonGroup>
-              <ChakraModal
+              <CheckApplications
                 size={"6xl"}
                 buttonContent={"Check Applications"}
                 data={applicationData}
@@ -201,7 +213,7 @@ export default function TaskDetails() {
               </StatNumber>
             </Stat>
           </StatGroup>
-          {renderBtn()}
+          <ButtonGroup>{renderBtn()}</ButtonGroup>
         </VStack>
       )}
     </>

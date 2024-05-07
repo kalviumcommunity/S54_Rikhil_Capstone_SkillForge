@@ -98,9 +98,7 @@ export default function IndustryTasks() {
         return <Button size={["xs", "sm", "md"]}>Edit</Button>;
       } else {
         return (
-          <Button isDisabled size={["xs", "sm", "md"]}>
-            Edit
-          </Button>
+          ""
         );
       }
     }
