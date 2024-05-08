@@ -9,6 +9,7 @@ import {
   StatNumber,
   Tag,
   Text,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -20,6 +21,7 @@ import { FaRegCalendarCheck } from "react-icons/fa";
 import { getCookie } from "../utils/cookie";
 import { AppContext } from "./Context";
 import { CheckApplications } from "./CheckApplications";
+import Loading from "./Loading";
 
 export default function TaskDetails() {
   const [applicationData, setApplicationData] = useState([]);
@@ -110,6 +112,8 @@ export default function TaskDetails() {
             </Button>
           );
         } else {
+          const deadline = new Date(data.deadline).getTime();
+          const today = new Date().getTime();
           return (
             <ButtonGroup>
               <CheckApplications
@@ -118,9 +122,19 @@ export default function TaskDetails() {
                 data={applicationData}
                 fetchData={applicationDataFetch}
               />
-              <Button isDisabled colorScheme="purple" size={["xs", "sm", "md"]}>
-                View Submissions
-              </Button>
+              {today > deadline ? (
+                <Button colorScheme="purple" size={["xs", "sm", "md"]}>
+                  View Submissions
+                </Button>
+              ) : (
+                <Button
+                  isDisabled
+                  colorScheme="purple"
+                  size={["xs", "sm", "md"]}
+                >
+                  View Submissions
+                </Button>
+              )}
             </ButtonGroup>
           );
         }
@@ -131,7 +145,7 @@ export default function TaskDetails() {
   return (
     <>
       {Object.keys(data).length == 0 ? (
-        "Loading"
+        <Loading />
       ) : (
         <VStack
           gap={"3vmax"}
@@ -205,14 +219,25 @@ export default function TaskDetails() {
                 <FaRegCalendarCheck />
                 Deadline
               </StatLabel>
-              <StatNumber fontSize={"2.3vmin"}>
-                {new Date(data.deadline).toLocaleString("en-IN", {
+              <Tooltip
+                label={`Submissions allowed before ${new Date(
+                  data.deadline
+                ).toLocaleString("en-IN", {
                   year: "numeric",
                   month: "numeric",
                   day: "numeric",
                   timeZone: "Asia/Kolkata",
-                })}
-              </StatNumber>
+                })} 5:30AM`}
+              >
+                <StatNumber fontSize={"2.3vmin"}>
+                  {new Date(data.deadline).toLocaleString("en-IN", {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                    timeZone: "Asia/Kolkata",
+                  })}
+                </StatNumber>
+              </Tooltip>
             </Stat>
           </StatGroup>
           <ButtonGroup>{renderBtn()}</ButtonGroup>
