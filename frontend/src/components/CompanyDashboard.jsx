@@ -6,6 +6,8 @@ import {
   Stack,
   Text,
   VStack,
+  background,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -15,10 +17,12 @@ import { ImProfile } from "react-icons/im";
 import { GoGraph } from "react-icons/go";
 import { MdOutlinePublish } from "react-icons/md";
 import { Link } from "react-router-dom";
+import Loading from "./Loading";
 
 export default function CompanyDashboard() {
   const [greeting, setGreeting] = useState("");
   const [data, setData] = useState({});
+  const [tasks, setTasks] = useState([]);
   const authToken = getCookie("auth-token");
   function greetByTime() {
     const currentTime = new Date();
@@ -33,6 +37,25 @@ export default function CompanyDashboard() {
     }
   }
   useEffect(greetByTime, []);
+  const toast = useToast();
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/tasks/particular/company", {
+        headers: { Authorization: authToken },
+      })
+      .then((res) => {
+        setTasks(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast({
+          title: "Server error! Contact admin",
+          status: "error",
+          duration: 3000,
+          isClosable: false,
+        });
+      });
+  }, []);
   useEffect(() => {
     setTimeout(() => {
       axios
@@ -50,9 +73,7 @@ export default function CompanyDashboard() {
   return (
     <>
       {Object.keys(data).length == 0 ? (
-        <div style={{ flex: 1, color: "white" }} className="loading">
-          Loading
-        </div>
+        <Loading />
       ) : (
         <div className="dashboard-parent">
           <Stack
@@ -62,6 +83,7 @@ export default function CompanyDashboard() {
             justifyContent={"center"}
             gap={"7vmax"}
           >
+            width={["50%"]}
             <VStack
               flexShrink={0}
               width={["70vw", "70vw", "70vw", "25vw"]}
@@ -93,7 +115,7 @@ export default function CompanyDashboard() {
                   </Text>
                   <HStack
                     justifyContent={"center"}
-                    gap={'1.5vmin'}
+                    gap={"1.5vmin"}
                     flexWrap={"wrap"}
                   >
                     <Text
@@ -140,17 +162,67 @@ export default function CompanyDashboard() {
               className="right-dashboard"
               justifyContent={"center"}
               // flex={1}
-              gap={"4vmin"}
+              gap={"7vmin"}
             >
-              <VStack width={"100%"}>
+              <VStack width={"100%"} gap={"5vmin"}>
                 <Heading fontSize={"2vmax"}>Tasks Published</Heading>
-                <HStack className="published-tasks" overflowX={"scroll"} width={"inherit"}>
-                  <Box border={"1px solid purple"} p={"2vmin"}>
-                    Hello
-                  </Box>
+                <HStack
+                  className="published-tasks"
+                  overflowX={"scroll"}
+                  width={"inherit"}
+                >
+                  {tasks.length == 0 ? (
+                    <Text>No Tasks here yet!</Text>
+                  ) : (
+                    tasks.map((e) => {
+                      return (
+                        <Box
+                          width={["80%", "80%", "70%", "50%"]}
+                          height={["12vh", "10vh", "15vh", "20vh"]}
+                          cursor={"pointer"}
+                          flexShrink={0}
+                          key={e._id}
+                          border={"1px solid purple"}
+                          borderRadius={"10px"}
+                          p={"2vmin"}
+                        >
+                          <VStack
+                            className="published-tasks"
+                            overflowY={"scroll"}
+                            height={"100%"}
+                          >
+                            <Heading
+                              fontSize={[
+                                "1.5vmax",
+                                "1.5vmax",
+                                "1.8vmax",
+                                "1.3vamx",
+                              ]}
+                            >
+                              {e.title.length > 25
+                                ? e.title.substr(0, 25) + "..."
+                                : e.title}
+                            </Heading>
+                            <Text
+                              fontSize={[
+                                "2.5vmin",
+                                "2.5vmin",
+                                "2vmin",
+                                "2vmin",
+                              ]}
+                            >
+                              {e.description.length > 200
+                                ? e.description.substr(0, 200) + "..."
+                                : e.description}
+                            </Text>
+                          </VStack>
+                        </Box>
+                      );
+                    })
+                  )}
                 </HStack>
               </VStack>
-              <VStack>
+              <VStack width={"100%"} gap={"5vmin"}>
                 <Heading fontSize={"2vmax"}>Submissions Received</Heading>
               </VStack>
             </VStack>
