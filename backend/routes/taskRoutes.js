@@ -57,6 +57,19 @@ taskRouter.get(
     }
   })
 );
+taskRouter.get(
+  "/particular/company",
+  jwtVerify,
+  wrapAsync(async (req, res) => {
+    let findComp = await Company.findOne({ orgname: req.body.company });
+    if (findComp != null) {
+      let result = await Task.find({ company: findComp._id });
+      res.send(result);
+    } else {
+      throw new ExpressError(404, "Company not found!");
+    }
+  })
+);
 
 taskRouter.post(
   "/new",

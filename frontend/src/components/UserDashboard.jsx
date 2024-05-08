@@ -15,6 +15,7 @@ import { ImProfile } from "react-icons/im";
 import { GoGraph } from "react-icons/go";
 import { MdOutlinePublish } from "react-icons/md";
 import { Link } from "react-router-dom";
+import Loading from "./Loading";
 
 export default function UserDashboard() {
   const [greeting, setGreeting] = useState("");
@@ -50,9 +51,7 @@ export default function UserDashboard() {
   return (
     <>
       {Object.keys(data).length == 0 ? (
-        <div style={{ flex: 1, color: "white" }} className="loading">
-          Loading
-        </div>
+        <Loading />
       ) : (
         <div className="dashboard-parent">
           <Stack
