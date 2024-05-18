@@ -16,6 +16,7 @@ import UserDashboard from "../UserDashboard";
 import IndustryTasks from "../IndustryTasks";
 import TaskDetails from "../TaskDetails";
 import ApplyForTask from "../ApplyForTask";
+import SubmitForTask from "../SubmitForTask";
 
 export default function AllRoutes() {
   return (
@@ -67,7 +68,7 @@ export default function AllRoutes() {
             </UserAndCompany>
           </Login>
         }
-      ></Route>
+      />
       <Route
         path="/task/details/:id"
         element={
@@ -77,13 +78,23 @@ export default function AllRoutes() {
             </UserAndCompany>
           </Login>
         }
-      ></Route>
+      />
       <Route
         path="/apply/:id"
         element={
           <Login>
             <OnlyUser>
               <ApplyForTask />
+            </OnlyUser>
+          </Login>
+        }
+      />
+      <Route
+        path="/submit/:id"
+        element={
+          <Login>
+            <OnlyUser>
+              <SubmitForTask />
             </OnlyUser>
           </Login>
         }

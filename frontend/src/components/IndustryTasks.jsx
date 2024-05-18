@@ -28,7 +28,9 @@ import Loading from "./Loading";
 export default function IndustryTasks() {
   const [data, setData] = useState([]);
   const [applicationTaskIDsArr, setApplicationTaskIDArr] = useState([]);
+  const [submissionsIDsArr, setSubmissionsIDsArr] = useState([]);
   const [applications, setApplications] = useState([]);
+  const [submissions, setSubmissions] = useState([]);
   const navigate = useNavigate();
   document.title = "SkillForge - Explore Industry Tasks";
   const authToken = getCookie("auth-token");
@@ -43,6 +45,25 @@ export default function IndustryTasks() {
           setApplications(res.data);
           res.data.map((e) => {
             setApplicationTaskIDArr((prev) => {
+              return [...prev, e.task];
+            });
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
+  useEffect(() => {
+    if (userType == "Student") {
+      axios
+        .get("http://localhost:8080/submissions/user/particular", {
+          headers: { Authorization: authToken },
+        })
+        .then((res) => {
+          setSubmissions(res.data);
+          res.data.map((e) => {
+            setSubmissionsIDsArr((prev) => {
               return [...prev, e.task];
             });
           });
@@ -71,35 +92,53 @@ export default function IndustryTasks() {
   const redirectToApply = (id) => {
     navigate(`/apply/${id}`);
   };
-  const RenderButton = ({ id }) => {
+  const redirectToSubmit = (id) => {
+    navigate(`/submit/${id}`);
+  };
+  const RenderButton = ({ id, deadline }) => {
     if (userType == "Student") {
       // console.log(id)
-      if (applicationTaskIDsArr.includes(id)) {
-        let result = applications.find((obj) => obj["task"] == id);
-        if (result.state != "accepted") {
+      if (new Date(deadline).getTime() > new Date().getTime()) {
+        if (applicationTaskIDsArr.includes(id)) {
+          let result = applications.find((obj) => obj["task"] == id);
+          if (result.state != "accepted") {
+            return (
+              <Button isDisabled size={["xs", "sm", "md"]}>
+                Applied ({result.state})
+              </Button>
+            );
+          } else if (result.state == "accepted") {
+            if (submissionsIDsArr.includes(id)) {
+              return (
+                <Button isDisabled colorScheme="purple">
+                  Submitted
+                </Button>
+              );
+            } else {
+              return (
+                <Button
+                  onClick={() => {
+                    redirectToSubmit(id);
+                  }}
+                  colorScheme="purple"
+                >
+                  Submit
+                </Button>
+              );
+            }
+          }
+        } else {
           return (
-            <Button isDisabled size={["xs", "sm", "md"]}>
-              Applied ({result.state})
-            </Button>
-          );
-        } else if (result.state == "accepted") {
-          return (
-            <Button isDisabled size={["xs", "sm", "md"]}>
-              Submit
+            <Button
+              onClick={() => {
+                redirectToApply(id);
+              }}
+              size={["xs", "sm", "md"]}
+            >
+              Apply for Task
             </Button>
           );
         }
-      } else {
-        return (
-          <Button
-            onClick={() => {
-              redirectToApply(id);
-            }}
-            size={["xs", "sm", "md"]}
-          >
-            Apply for Task
-          </Button>
-        );
       }
     } else if (userType == "Company") {
       if (id == currentUsername) {
@@ -244,7 +283,7 @@ export default function IndustryTasks() {
                         </Button>
 
                         {userType == "Student" ? (
-                          <RenderButton id={e._id} />
+                          <RenderButton id={e._id} deadline={e.deadline} />
                         ) : (
                           <RenderButton id={e.company.orgname} />
                         )}

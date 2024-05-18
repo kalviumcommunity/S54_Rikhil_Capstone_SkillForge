@@ -9,6 +9,10 @@ const submissionSchema = new mongoose.Schema({
   deployed: {
     type: String,
   },
+  description: {
+    type: String,
+    required: true,
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -29,3 +33,7 @@ const submissionSchema = new mongoose.Schema({
     default: formatDate,
   },
 });
+
+const Submission = mongoose.model("Submission", submissionSchema);
+
+module.exports = Submission;

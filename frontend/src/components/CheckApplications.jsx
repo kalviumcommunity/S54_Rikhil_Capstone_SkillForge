@@ -93,8 +93,9 @@ export function CheckApplications({ buttonContent, size, data, fetchData }) {
       </Button>
 
       <Modal
+        isCentered
         scrollBehavior="inside"
-        size={size}
+        size={["sm", "md", "2xl", "4xl"]}
         isOpen={isOpen}
         onClose={onClose}
       >
@@ -126,7 +127,12 @@ export function CheckApplications({ buttonContent, size, data, fetchData }) {
               ) : (
                 filteredArr.map((e, i) => {
                   return (
-                    <Box className="application-box" key={i} p={"4vmin"}>
+                    <Box
+                      width={"100%"}
+                      className="application-box"
+                      key={i}
+                      p={"4vmin"}
+                    >
                       <VStack gap={"2vmin"}>
                         <>
                           <Heading
@@ -173,7 +179,7 @@ export function CheckApplications({ buttonContent, size, data, fetchData }) {
                               ></Button>
                             </ButtonGroup>
                           )}
-                          <Tag alignSelf={"flex-end"} colorScheme="purple">
+                          <Tag fontSize={'2vmin'} alignSelf={"flex-end"} colorScheme="purple">
                             Application by : {e.user.name}
                           </Tag>
                         </HStack>

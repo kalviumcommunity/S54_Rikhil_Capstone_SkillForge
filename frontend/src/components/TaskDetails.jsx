@@ -22,9 +22,12 @@ import { getCookie } from "../utils/cookie";
 import { AppContext } from "./Context";
 import { CheckApplications } from "./CheckApplications";
 import Loading from "./Loading";
+import { ViewUserSubmission } from "./ViewUserSubmission";
+import { CheckSubmissions } from "./CheckSubmissions";
 
 export default function TaskDetails() {
   const [applicationData, setApplicationData] = useState([]);
+  const [submissions, setSubmissions] = useState([]);
   const [data, setData] = useState({});
   const { userType, setUserType } = useContext(AppContext);
   const navigate = useNavigate();
@@ -56,7 +59,33 @@ export default function TaskDetails() {
         });
     }
   };
+  const submissionsDataFetch = () => {
+    if (userType == "Student") {
+      axios
+        .get(`http://localhost:8080/submissions/particular/${id}`, {
+          headers: { Authorization: authToken },
+        })
+        .then((res) => {
+          setSubmissions(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (userType == "Company") {
+      axios
+        .get(`http://localhost:8080/submissions/task/particular/${id}`, {
+          headers: { Authorization: authToken },
+        })
+        .then((res) => {
+          setSubmissions(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
   useEffect(applicationDataFetch, []);
+  useEffect(submissionsDataFetch, []);
   useEffect(() => {
     axios
       .get(`http://localhost:8080/tasks/one/${id}`)
@@ -70,7 +99,10 @@ export default function TaskDetails() {
   const redirectToApply = (id) => {
     navigate(`/apply/${id}`);
   };
-  const renderBtn = () => {
+  const redirectToSubmit = (id) => {
+    navigate(`/submit/${id}`);
+  };
+  const renderBtn = (deadline) => {
     if (userType == "Student") {
       if (Object.keys(applicationData).length > 0) {
         if (applicationData.state == "accepted") {
@@ -79,9 +111,40 @@ export default function TaskDetails() {
               <Button isDisabled colorScheme="purple">
                 Application Status : {applicationData.state.toUpperCase()}
               </Button>
-              <Button isDisabled colorScheme="purple">
-                Submit
-              </Button>
+              {new Date(deadline).getTime() > new Date().getTime() ? (
+                <>
+                  {Object.keys(submissions).length == 0 ? (
+                    <Button
+                      onClick={() => {
+                        redirectToSubmit(data._id);
+                      }}
+                      colorScheme="purple"
+                    >
+                      Submit
+                    </Button>
+                  ) : (
+                    <ViewUserSubmission data={submissions} />
+                  )}
+                </>
+              ) : (
+                <>
+                  {Object.keys(submissions).length == 0 ? (
+                    <Tooltip label="Deadline crossed!">
+                      <Button
+                        isDisabled
+                        onClick={() => {
+                          redirectToSubmit(data._id);
+                        }}
+                        colorScheme="purple"
+                      >
+                        Submit
+                      </Button>
+                    </Tooltip>
+                  ) : (
+                    <ViewUserSubmission data={submissions} />
+                  )}
+                </>
+              )}
             </>
           );
         }
@@ -123,17 +186,21 @@ export default function TaskDetails() {
                 fetchData={applicationDataFetch}
               />
               {today > deadline ? (
-                <Button colorScheme="purple" size={["xs", "sm", "md"]}>
-                  View Submissions
-                </Button>
+                <CheckSubmissions
+                  buttonContent={"Check Submissions"}
+                  data={submissions}
+                  fetchData={submissionsDataFetch}
+                />
               ) : (
-                <Button
-                  isDisabled
-                  colorScheme="purple"
-                  size={["xs", "sm", "md"]}
-                >
-                  View Submissions
-                </Button>
+                <Tooltip label="You will be able to view submissions when the deadline surpasses!">
+                  <Button
+                    isDisabled
+                    colorScheme="purple"
+                    size={["xs", "sm", "md"]}
+                  >
+                    View Submissions
+                  </Button>
+                </Tooltip>
               )}
             </ButtonGroup>
           );
@@ -150,7 +217,7 @@ export default function TaskDetails() {
         <VStack
           gap={"3vmax"}
           className="task-details-parent"
-          padding="8vmin 20vmin"
+          padding="8vmin 15vmin"
         >
           <Heading fontSize={"2vmax"}>{data.title}</Heading>
           <VStack width={"100%"}>
@@ -173,7 +240,12 @@ export default function TaskDetails() {
             >
               {data.skills.map((e, i) => {
                 return (
-                  <Tag key={i} flexShrink={0} colorScheme="purple">
+                  <Tag
+                    fontSize={"2vmin"}
+                    key={i}
+                    flexShrink={0}
+                    colorScheme="purple"
+                  >
                     {e}
                   </Tag>
                 );
@@ -240,7 +312,7 @@ export default function TaskDetails() {
               </Tooltip>
             </Stat>
           </StatGroup>
-          <ButtonGroup>{renderBtn()}</ButtonGroup>
+          <ButtonGroup>{renderBtn(data.deadline)}</ButtonGroup>
         </VStack>
       )}
     </>

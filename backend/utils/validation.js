@@ -67,6 +67,7 @@ exports.applicationValidation = Joi.object({
 }).required();
 
 exports.submissionValidation = Joi.object({
-  repo: Joi.string().required(),
-  deployed: Joi.string().required(),
+  repo: Joi.string().required().regex(/^(?:http|https):\/\/[^\s]+/),
+  deployed: Joi.string().regex(/^(?:http|https):\/\/[^\s]+/),
+  description: Joi.string().required(),
 }).required();
