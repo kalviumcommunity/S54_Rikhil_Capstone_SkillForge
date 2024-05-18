@@ -2,17 +2,15 @@ const express = require("express");
 const wrapAsync = require("../utils/wrapAsync");
 const jwt = require("jsonwebtoken");
 const ExpressError = require("../utils/ExpressError.js");
-const { applicationValidation } = require("../utils/validation.js");
-const Application = require("../models/application.js");
+const { submissionValidation } = require("../utils/validation.js");
 const Task = require("../models/task.js");
 const User = require("../models/user.js");
-const applicationRouter = express.Router();
+const Submission = require("../models/submission.js");
+const submissionRouter = express.Router();
 require("dotenv").config({ path: "../.env" });
 
-applicationRouter.use(express.json());
-
-const validateApplication = (req, res, next) => {
-  let { error } = applicationValidation.validate(req.body);
+const validateSubmission = (req, res, next) => {
+  let { error } = submissionValidation.validate(req.body);
   if (error) {
     throw new ExpressError(400, error);
   } else {
@@ -61,14 +59,14 @@ const jwtVerify = (req, res, next) => {
   }
 };
 
-applicationRouter.get(
+submissionRouter.get(
   "/particular/:id",
   extractName,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let findUser = await User.findOne({ username: req.body.username });
     if (findUser != null) {
-      let result = await Application.findOne({
+      let result = await Submission.findOne({
         $and: [{ task: id }, { user: findUser._id }],
       });
       res.send(result);
@@ -78,13 +76,13 @@ applicationRouter.get(
   })
 );
 
-applicationRouter.get(
+submissionRouter.get(
   "/user/particular",
   extractName,
   wrapAsync(async (req, res) => {
     let findUser = await User.findOne({ username: req.body.username });
     if (findUser != null) {
-      let result = await Application.find({ user: findUser._id });
+      let result = await Submission.find({ user: findUser._id });
       res.send(result);
     } else {
       throw new ExpressError(404, "User not found!");
@@ -92,19 +90,19 @@ applicationRouter.get(
   })
 );
 
-applicationRouter.get(
+submissionRouter.get(
   "/task/particular/:id",
   jwtVerify,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    let result = await Application.find({ task: id }).populate("user");
+    let result = await Submission.find({ task: id }).populate("user");
     res.send(result);
   })
 );
 
-applicationRouter.post(
+submissionRouter.post(
   "/new/:id",
-  validateApplication,
+  validateSubmission,
   extractName,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
@@ -112,7 +110,11 @@ applicationRouter.post(
     if (findTask != null) {
       let findUser = await User.findOne({ username: req.body.username });
       if (findUser != null) {
-        let newData = new Application({ why: req.body.why, how: req.body.how });
+        let newData = new Submission({
+          repo: req.body.repo,
+          deployed: req.body.deployed,
+          description: req.body.description,
+        });
         newData.user = findUser;
         newData.task = findTask;
         await newData.save();
@@ -126,23 +128,9 @@ applicationRouter.post(
   })
 );
 
-applicationRouter.post(
-  "/change/state",
-  jwtVerify,
-  wrapAsync(async (req, res) => {
-    let { state, application } = req.body;
-    let findApp = await Application.findById(application);
-    if (findApp != null) {
-      findApp.state = state;
-      await findApp.save();
-      res.send("Updated!");
-    }
-  })
-);
-
-applicationRouter.use((err, req, res, next) => {
+submissionRouter.use((err, req, res, next) => {
   let { status = 500, message = "Some error occured..!" } = err;
   res.status(status).send(message);
 });
 
-module.exports = applicationRouter;
+module.exports = submissionRouter;
