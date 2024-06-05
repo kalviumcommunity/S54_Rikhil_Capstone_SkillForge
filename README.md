@@ -37,9 +37,3 @@ This project is based on MERN Stack
 
 Have questions or suggestions? Contact me at [rikhiltaneja@gmail.com](mailto:rikhiltaneja@gmail.com)
 
-## Daily Plan
-- **Day 1:-** Basic Project Setup (Github Repository and ReadMe file setup)
-- **Day 2:-** Basic Backend Server setup and deployment (Initializing Express App and developing basic routes)
-- **Day 3:-** Backend Server enhancement (Developing basic CRUD operations)
-- **Day 4:-** Database Setup (Setting up MongoDB and connecting it with Express App)
-- **Day 5:-** Figma Design (Starting with basic Figma Design for Front-End Application)
