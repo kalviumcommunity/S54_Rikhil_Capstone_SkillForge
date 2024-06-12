@@ -21,7 +21,6 @@ import axios from "axios";
 
 const CheckSubmissions = memo(
   ({ buttonContent, data, fetchData, winAmount, id }) => {
-    console.log(data);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const authToken = getCookie("auth-token");
     const company = getCookie("username");
@@ -30,7 +29,11 @@ const CheckSubmissions = memo(
 
     useEffect(() => {
       axios
-        .get("http://localhost:8080/payments/getkey")
+        .get("http://localhost:8080/payments/getkey", {
+          headers: {
+            Authorization: authToken,
+          },
+        })
         .then((res) => {
           setKey(res.data.key);
         })
@@ -41,9 +44,13 @@ const CheckSubmissions = memo(
 
     const markWinner = (username, subId) => {
       axios
-        .post("http://localhost:8080/payments/checkout", {
-          amount: winAmount,
-        })
+        .post(
+          "http://localhost:8080/payments/checkout",
+          {
+            amount: winAmount,
+          },
+          { headers: { Authorization: authToken } }
+        )
         .then((res) => {
           const options = {
             key,
@@ -172,7 +179,7 @@ const CheckSubmissions = memo(
                         <Tag
                           colorScheme="purple"
                           fontSize={"2vmin"}
-                          marginLeft={'auto'}
+                          marginLeft={"auto"}
                         >
                           Submission by: {e.user.name}
                         </Tag>

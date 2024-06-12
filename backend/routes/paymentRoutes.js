@@ -10,6 +10,26 @@ require("dotenv").config();
 
 paymentRouter.use(express.json());
 
+const jwtCompanyVerify = (req, res, next) => {
+  try {
+    let { authorization } = req.headers;
+    let result = jwt.verify(authorization, process.env.JWT_PASS);
+    if (result.type == "Company") {
+      next();
+    } else {
+      throw new ExpressError(
+        403,
+        "Not authorised to access this route without correct auth token"
+      );
+    }
+  } catch (err) {
+    throw new ExpressError(
+      403,
+      "Not authorised to access this route without correct auth token"
+    );
+  }
+};
+
 const instance = new razorpay({
   key_id: process.env.KEY_ID,
   key_secret: process.env.KEY_SECRET,
@@ -17,6 +37,7 @@ const instance = new razorpay({
 
 paymentRouter.post(
   "/checkout",
+  jwtCompanyVerify,
   wrapAsync(async (req, res) => {
     const options = {
       amount: Number(req.body.amount * 100),
@@ -27,7 +48,7 @@ paymentRouter.post(
   })
 );
 
-paymentRouter.get("/getkey", (req, res) => {
+paymentRouter.get("/getkey", jwtCompanyVerify, (req, res) => {
   res.json({ key: process.env.KEY_ID });
 });
 
@@ -55,7 +76,7 @@ paymentRouter.post("/paymentverification", async (req, res) => {
       res.status(404).send("User not found!");
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 });
 
