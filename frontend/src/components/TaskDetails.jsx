@@ -23,7 +23,7 @@ import { AppContext } from "./Context";
 import { CheckApplications } from "./CheckApplications";
 import Loading from "./Loading";
 import { ViewUserSubmission } from "./ViewUserSubmission";
-import { CheckSubmissions } from "./CheckSubmissions";
+import CheckSubmissions from "./CheckSubmissions";
 
 export default function TaskDetails() {
   const [applicationData, setApplicationData] = useState([]);
@@ -84,17 +84,38 @@ export default function TaskDetails() {
         });
     }
   };
-  useEffect(applicationDataFetch, []);
-  useEffect(submissionsDataFetch, []);
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/tasks/one/${id}`)
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => {
+    const fetchData = async () => {
+      try {
+        const [taskRes, submissionsRes, applicationRes] = await Promise.all([
+          axios.get(`http://localhost:8080/tasks/one/${id}`),
+          axios.get(
+            `http://localhost:8080/submissions/${
+              userType === "Student" ? "particular" : "task/particular"
+            }/${id}`,
+            {
+              headers: { Authorization: authToken },
+            }
+          ),
+          axios.get(
+            `http://localhost:8080/applications/${
+              userType === "Student" ? "particular" : "task/particular"
+            }/${id}`,
+            {
+              headers: { Authorization: authToken },
+            }
+          ),
+        ]);
+
+        setData(taskRes.data);
+        setSubmissions(submissionsRes.data);
+        setApplicationData(applicationRes.data);
+      } catch (err) {
         console.log(err);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
   const redirectToApply = (id) => {
     navigate(`/apply/${id}`);
@@ -167,44 +188,58 @@ export default function TaskDetails() {
         );
       }
     } else if (userType == "Company") {
-      if (currentUsername == data.company.orgname) {
-        if (applicationData.length == 0) {
-          return (
-            <Button isDisabled colorScheme="purple" size={["xs", "sm", "md"]}>
-              No Applications yet!
-            </Button>
-          );
-        } else {
-          const deadline = new Date(data.deadline).getTime();
-          const today = new Date().getTime();
-          return (
-            <ButtonGroup>
-              <CheckApplications
-                size={"6xl"}
-                buttonContent={"Check Applications"}
-                data={applicationData}
-                fetchData={applicationDataFetch}
+      if (currentUsername === data.company.orgname) {
+        const deadline = new Date(data.deadline).getTime();
+        const today = new Date().getTime();
+        return (
+          <ButtonGroup>
+            {applicationData.length === 0 ? (
+              <Button isDisabled colorScheme="purple" size={["xs", "sm", "md"]}>
+                No Applications yet!
+              </Button>
+            ) : (
+              <>
+                {today < deadline ? (
+                  <CheckApplications
+                    size={"6xl"}
+                    buttonContent={"Check Applications"}
+                    data={applicationData}
+                    fetchData={applicationDataFetch}
+                  />
+                ) : (
+                  <Tooltip label="Deadline crossed! Cannot accept or reject applications now">
+                    <Button
+                      isDisabled
+                      colorScheme="purple"
+                      size={["xs", "sm", "md"]}
+                    >
+                      Check Applications
+                    </Button>
+                  </Tooltip>
+                )}
+              </>
+            )}
+            {today > deadline ? (
+              <CheckSubmissions
+                buttonContent={"Check Submissions"}
+                data={submissions}
+                fetchData={submissionsDataFetch}
+                winAmount={data.bounty}
+                id = {data._id}
               />
-              {today > deadline ? (
-                <CheckSubmissions
-                  buttonContent={"Check Submissions"}
-                  data={submissions}
-                  fetchData={submissionsDataFetch}
-                />
-              ) : (
-                <Tooltip label="You will be able to view submissions when the deadline surpasses!">
-                  <Button
-                    isDisabled
-                    colorScheme="purple"
-                    size={["xs", "sm", "md"]}
-                  >
-                    View Submissions
-                  </Button>
-                </Tooltip>
-              )}
-            </ButtonGroup>
-          );
-        }
+            ) : (
+              <Tooltip label="You will be able to view submissions when the deadline surpasses!">
+                <Button
+                  isDisabled
+                  colorScheme="purple"
+                  size={["xs", "sm", "md"]}
+                >
+                  View Submissions
+                </Button>
+              </Tooltip>
+            )}
+          </ButtonGroup>
+        );
       }
     }
   };
@@ -214,106 +249,110 @@ export default function TaskDetails() {
       {Object.keys(data).length == 0 ? (
         <Loading />
       ) : (
-        <VStack
-          gap={"3vmax"}
-          className="task-details-parent"
-          padding="8vmin 15vmin"
-        >
-          <Heading fontSize={"2vmax"}>{data.title}</Heading>
-          <VStack width={"100%"}>
-            <Heading alignSelf={"flex-start"} fontSize={"1.3vmax"}>
-              Description
-            </Heading>
-            <Text color={"#A9A9A9"} align={"left"} fontSize={"2vmin"}>
-              {data.description}
-            </Text>
-          </VStack>
-          <VStack width={"100%"}>
-            <Heading alignSelf={"flex-start"} fontSize={"1.3vmax"}>
-              Skills Required
-            </Heading>
-            <HStack
-              className="skills-scroll"
-              overflowX={"scroll"}
-              width={"100%"}
-              alignContent={"flex-start"}
-            >
-              {data.skills.map((e, i) => {
-                return (
-                  <Tag
-                    fontSize={"2vmin"}
-                    key={i}
-                    flexShrink={0}
-                    colorScheme="purple"
-                  >
-                    {e}
-                  </Tag>
-                );
-              })}
-            </HStack>
-          </VStack>
+        <>
+          <VStack
+            gap={"3vmax"}
+            className="task-details-parent"
+            padding="8vmin 15vmin"
+          >
+            <Heading fontSize={"2vmax"}>{data.title}</Heading>
+            <VStack width={"100%"}>
+              <Heading alignSelf={"flex-start"} fontSize={"1.3vmax"}>
+                Description
+              </Heading>
+              <Text color={"#A9A9A9"} align={"left"} fontSize={"2vmin"}>
+                {data.description}
+              </Text>
+            </VStack>
+            <VStack width={"100%"}>
+              <Heading alignSelf={"flex-start"} fontSize={"1.3vmax"}>
+                Skills Required
+              </Heading>
+              <HStack
+                className="skills-scroll"
+                overflowX={"scroll"}
+                width={"100%"}
+                alignContent={"flex-start"}
+              >
+                {data.skills.map((e, i) => {
+                  return (
+                    <Tag
+                      fontSize={"2vmin"}
+                      key={i}
+                      flexShrink={0}
+                      colorScheme="purple"
+                    >
+                      {e}
+                    </Tag>
+                  );
+                })}
+              </HStack>
+            </VStack>
 
-          <StatGroup width={"100%"}>
-            <Stat display={"flex"} justifyContent={"center"}>
-              <StatLabel
-                color={"gray"}
-                display={"flex"}
-                gap={"0.2vmin"}
-                fontSize={"1.7vmin"}
-                alignItems={"center"}
-              >
-                <CiBag1 />
-                Bounty
-              </StatLabel>
-              <StatNumber fontSize={"2.3vmin"}>{data.bounty} INR</StatNumber>
-            </Stat>
-            <Stat display={"flex"} justifyContent={"center"}>
-              <StatLabel
-                color={"gray"}
-                display={"flex"}
-                gap={"0.2vmin"}
-                fontSize={"1.7vmin"}
-                alignItems={"center"}
-              >
-                <MdCorporateFare />
-                Posted by
-              </StatLabel>
-              <StatNumber fontSize={"2.3vmin"}>{data.company.name}</StatNumber>
-            </Stat>
-            <Stat display={"flex"} justifyContent={"center"}>
-              <StatLabel
-                color={"gray"}
-                display={"flex"}
-                gap={"0.2vmin"}
-                fontSize={"1.7vmin"}
-                alignItems={"center"}
-              >
-                <FaRegCalendarCheck />
-                Deadline
-              </StatLabel>
-              <Tooltip
-                label={`Submissions allowed before ${new Date(
-                  data.deadline
-                ).toLocaleString("en-IN", {
-                  year: "numeric",
-                  month: "numeric",
-                  day: "numeric",
-                  timeZone: "Asia/Kolkata",
-                })} 5:30AM`}
-              >
+            <StatGroup width={"100%"}>
+              <Stat display={"flex"} justifyContent={"center"}>
+                <StatLabel
+                  color={"gray"}
+                  display={"flex"}
+                  gap={"0.2vmin"}
+                  fontSize={"1.7vmin"}
+                  alignItems={"center"}
+                >
+                  <CiBag1 />
+                  Bounty
+                </StatLabel>
+                <StatNumber fontSize={"2.3vmin"}>{data.bounty} INR</StatNumber>
+              </Stat>
+              <Stat display={"flex"} justifyContent={"center"}>
+                <StatLabel
+                  color={"gray"}
+                  display={"flex"}
+                  gap={"0.2vmin"}
+                  fontSize={"1.7vmin"}
+                  alignItems={"center"}
+                >
+                  <MdCorporateFare />
+                  Posted by
+                </StatLabel>
                 <StatNumber fontSize={"2.3vmin"}>
-                  {new Date(data.deadline).toLocaleString("en-IN", {
+                  {data.company.name}
+                </StatNumber>
+              </Stat>
+              <Stat display={"flex"} justifyContent={"center"}>
+                <StatLabel
+                  color={"gray"}
+                  display={"flex"}
+                  gap={"0.2vmin"}
+                  fontSize={"1.7vmin"}
+                  alignItems={"center"}
+                >
+                  <FaRegCalendarCheck />
+                  Deadline
+                </StatLabel>
+                <Tooltip
+                  label={`Submissions allowed before ${new Date(
+                    data.deadline
+                  ).toLocaleString("en-IN", {
                     year: "numeric",
                     month: "numeric",
                     day: "numeric",
                     timeZone: "Asia/Kolkata",
-                  })}
-                </StatNumber>
-              </Tooltip>
-            </Stat>
-          </StatGroup>
-          <ButtonGroup>{renderBtn(data.deadline)}</ButtonGroup>
-        </VStack>
+                  })} 5:30AM`}
+                >
+                  <StatNumber fontSize={"2.3vmin"}>
+                    {new Date(data.deadline).toLocaleString("en-IN", {
+                      year: "numeric",
+                      month: "numeric",
+                      day: "numeric",
+                      timeZone: "Asia/Kolkata",
+                    })}
+                  </StatNumber>
+                </Tooltip>
+              </Stat>
+            </StatGroup>
+            <ButtonGroup>{renderBtn(data.deadline)}</ButtonGroup>
+          </VStack>
+        </>
       )}
     </>
   );

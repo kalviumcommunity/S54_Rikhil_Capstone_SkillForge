@@ -17,8 +17,8 @@ export function ViewUserSubmission({ data }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Button colorScheme="purple" size={["xs", "sm", "md"]} onClick={onOpen}>
-        View your Submission
+      <Button colorScheme={data.winner ? "green" : "purple"} size={["xs", "sm", "md"]} onClick={onOpen}>
+        {data.winner ? "Winner!" : "View your Submission"}
       </Button>
 
       <Modal isCentered size={"2xl"} isOpen={isOpen} onClose={onClose}>

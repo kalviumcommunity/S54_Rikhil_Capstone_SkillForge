@@ -26,6 +26,7 @@ import { getCookie } from "../utils/cookie";
 import Loading from "./Loading";
 
 export default function IndustryTasks() {
+  console.log("TEST");
   const [data, setData] = useState([]);
   const [applicationTaskIDsArr, setApplicationTaskIDArr] = useState([]);
   const [submissionsIDsArr, setSubmissionsIDsArr] = useState([]);
@@ -36,55 +37,49 @@ export default function IndustryTasks() {
   const authToken = getCookie("auth-token");
   const currentUsername = getCookie("username");
   useEffect(() => {
-    if (userType == "Student") {
-      axios
-        .get("http://localhost:8080/applications/user/particular", {
-          headers: { Authorization: authToken },
-        })
-        .then((res) => {
-          setApplications(res.data);
-          res.data.map((e) => {
-            setApplicationTaskIDArr((prev) => {
-              return [...prev, e.task];
-            });
+    const fetchData = async () => {
+      if (userType == "Student") {
+        try {
+          const [applicationRes, submissionsRes, tasksRes] = await Promise.all([
+            axios.get("http://localhost:8080/applications/user/particular", {
+              headers: { Authorization: authToken },
+            }),
+            axios.get("http://localhost:8080/submissions/user/particular", {
+              headers: { Authorization: authToken },
+            }),
+            axios.get("http://localhost:8080/tasks/all"),
+          ]);
+          setApplications(applicationRes.data);
+          setSubmissions(submissionsRes.data);
+          setData(tasksRes.data);
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        axios
+          .get("http://localhost:8080/tasks/all")
+          .then((res) => {
+            setData(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
           });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+      }
+    };
+    fetchData();
   }, []);
   useEffect(() => {
-    if (userType == "Student") {
-      axios
-        .get("http://localhost:8080/submissions/user/particular", {
-          headers: { Authorization: authToken },
-        })
-        .then((res) => {
-          setSubmissions(res.data);
-          res.data.map((e) => {
-            setSubmissionsIDsArr((prev) => {
-              return [...prev, e.task];
-            });
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, []);
-  useEffect(() => {
-    setTimeout(() => {
-      axios
-        .get("http://localhost:8080/tasks/all")
-        .then((res) => {
-          setData(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }, 1000);
-  }, []);
+    applications.map((e) => {
+      setApplicationTaskIDArr((prev) => {
+        return [...prev, e.task];
+      });
+    });
+    submissions.map((e) => {
+      setSubmissionsIDsArr((prev) => {
+        return [...prev, e.task];
+      });
+    });
+  }, [applications, submissions]);
   const knowMore = (id) => {
     navigate(`/task/details/${id}`);
   };
@@ -156,7 +151,7 @@ export default function IndustryTasks() {
             Available <span style={{ color: "#8a3bf3" }}>Tasks</span>
           </Heading>
           <Input
-            placeholder="Enter any skill to search tasks"
+            placeholder="Enter any skill to seawrch tasks"
             width={"50%"}
             size={["xs", "sm", "md"]}
           />
