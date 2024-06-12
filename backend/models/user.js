@@ -10,15 +10,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  institution:{
+  institution: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Institution",
   },
-  password:{
-    type:String,
-    required:true,
+  password: {
+    type: String,
+    required: true,
   },
-  contact:{
+  contact: {
     email: {
       type: String,
       required: true,
@@ -28,10 +28,14 @@ const userSchema = new mongoose.Schema({
       required: true,
     },
   },
-  created:{
+  wallet: {
+    type: Number,
+    default: 0,
+  },
+  created: {
     type: Date,
-    default: formatDate
-  }
+    default: formatDate,
+  },
 });
 
 const User = mongoose.model("User", userSchema);

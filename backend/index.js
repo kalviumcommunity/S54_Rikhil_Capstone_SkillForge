@@ -8,6 +8,7 @@ const taskRouter = require("./routes/taskRoutes");
 const institutionRouter = require("./routes/institutionRoutes");
 const applicationRouter = require("./routes/applicationRoutes");
 const submissionRouter = require("./routes/submissionRoutes");
+const paymentRouter = require("./routes/paymentRoutes");
 
 app.use(cors());
 app.use(express.json());
@@ -35,8 +36,9 @@ app.use("/tasks", taskRouter);
 app.use("/institution", institutionRouter);
 app.use("/applications", applicationRouter);
 app.use("/submissions", submissionRouter);
+app.use("/payments", paymentRouter);
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
   console.log(`Connected to server ${PORT} 🚀!`);
 });
