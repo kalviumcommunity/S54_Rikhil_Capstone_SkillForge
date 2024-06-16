@@ -44,6 +44,7 @@ const jwtVerify = (req, res, next) => {
     let { authorization } = req.headers;
     let result = jwt.verify(authorization, process.env.JWT_PASS);
     if (result.type == "Company") {
+      req.body.orgname = result.data.orgname;
       next();
     } else {
       throw new ExpressError(
@@ -96,6 +97,40 @@ submissionRouter.get(
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let result = await Submission.find({ task: id }).populate("user");
+    res.send(result);
+  })
+);
+
+submissionRouter.get(
+  "/company/particular",
+  jwtVerify,
+  wrapAsync(async (req, res) => {
+    let { orgname } = req.body;
+    let result = await Submission.aggregate([
+      {
+        $lookup: {
+          from: 'tasks', // The name of the tasks collection
+          localField: 'task',
+          foreignField: '_id',
+          as: 'task'
+        }
+      },
+      { $unwind: '$task' },
+      {
+        $lookup: {
+          from: 'companies', // The name of the companies collection
+          localField: 'task.company',
+          foreignField: '_id',
+          as: 'task.company'
+        }
+      },
+      { $unwind: '$task.company' },
+      {
+        $match: {
+          'task.company.orgname': orgname
+        }
+      }
+    ]);
     res.send(result);
   })
 );

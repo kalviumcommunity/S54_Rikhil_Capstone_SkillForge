@@ -23,6 +23,7 @@ export default function CompanyDashboard() {
   const [greeting, setGreeting] = useState("");
   const [data, setData] = useState({});
   const [tasks, setTasks] = useState([]);
+  const [submissions, setSubmissions] = useState([]);
   const authToken = getCookie("auth-token");
   function greetByTime() {
     const currentTime = new Date();
@@ -39,36 +40,33 @@ export default function CompanyDashboard() {
   useEffect(greetByTime, []);
   const toast = useToast();
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/tasks/particular/company", {
-        headers: { Authorization: authToken },
-      })
-      .then((res) => {
-        setTasks(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
+    const fetchData = async () => {
+      try {
+        const [tasksRes, companyRes, subRes] = await Promise.all([
+          axios.get("http://localhost:8080/tasks/particular/company", {
+            headers: { Authorization: authToken },
+          }),
+          axios.get("http://localhost:8080/company/one", {
+            headers: { Authorization: authToken },
+          }),
+          axios.get("http://localhost:8080/submissions/company/particular", {
+            headers: { Authorization: authToken },
+          }),
+        ]);
+        setTasks(tasksRes.data);
+        setData(companyRes.data);
+        setSubmissions(subRes.data);
+      } catch (error) {
+        console.log(error);
         toast({
           title: "Server error! Contact admin",
           status: "error",
           duration: 3000,
           isClosable: false,
         });
-      });
-  }, []);
-  useEffect(() => {
-    setTimeout(() => {
-      axios
-        .get("http://localhost:8080/company/one", {
-          headers: { Authorization: authToken },
-        })
-        .then((res) => {
-          setData(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }, 1000);
+      }
+    };
+    setTimeout(fetchData, 1000);
   }, []);
   return (
     <>
@@ -83,7 +81,6 @@ export default function CompanyDashboard() {
             justifyContent={"center"}
             gap={"7vmax"}
           >
-            width={["50%"]}
             <VStack
               flexShrink={0}
               width={["70vw", "70vw", "70vw", "25vw"]}
@@ -162,9 +159,9 @@ export default function CompanyDashboard() {
               className="right-dashboard"
               justifyContent={"center"}
               // flex={1}
-              gap={"7vmin"}
+              gap={'5vmin'}
             >
-              <VStack width={"100%"} gap={"5vmin"}>
+              <VStack width={"100%"} gap={"3vmin"}>
                 <Heading fontSize={"2vmax"}>Tasks Published</Heading>
                 <HStack
                   className="published-tasks"
@@ -182,7 +179,7 @@ export default function CompanyDashboard() {
                           cursor={"pointer"}
                           flexShrink={0}
                           key={e._id}
-                          border={"1px solid purple"}
+                          border={"1px solid #8a3bf3"}
                           borderRadius={"10px"}
                           p={"2vmin"}
                         >
@@ -221,9 +218,6 @@ export default function CompanyDashboard() {
                     })
                   )}
                 </HStack>
-              </VStack>
-              <VStack width={"100%"} gap={"5vmin"}>
-                <Heading fontSize={"2vmax"}>Submissions Received</Heading>
               </VStack>
             </VStack>
           </Stack>

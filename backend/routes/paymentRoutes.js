@@ -5,7 +5,9 @@ const User = require("../models/user");
 const Company = require("../models/company");
 const Transaction = require("../models/transaction");
 const Submission = require("../models/submission");
+const ExpressError = require("../utils/ExpressError");
 const paymentRouter = express.Router();
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 paymentRouter.use(express.json());
@@ -65,7 +67,7 @@ paymentRouter.post("/paymentverification", async (req, res) => {
           from: findComp._id,
         });
         await newTransaction.save();
-        findUser.wallet = findUser.wallet + amount;
+        findUser.wallet = findUser.wallet + parseInt(amount);
         await findUser.save();
         await Submission.findByIdAndUpdate(subID, { winner: true });
         res.redirect(`http://localhost:5173/task/details/${id}`);
