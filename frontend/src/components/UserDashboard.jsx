@@ -37,7 +37,7 @@ export default function UserDashboard() {
   useEffect(() => {
     setTimeout(() => {
       axios
-        .get("http://localhost:8080/users/one", {
+        .get("https://skill-forge-backend.rikhiltaneja.com/users/one", {
           headers: { Authorization: authToken },
         })
         .then((res) => {

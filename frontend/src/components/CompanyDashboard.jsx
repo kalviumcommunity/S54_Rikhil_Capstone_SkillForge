@@ -43,13 +43,13 @@ export default function CompanyDashboard() {
     const fetchData = async () => {
       try {
         const [tasksRes, companyRes, subRes] = await Promise.all([
-          axios.get("http://localhost:8080/tasks/particular/company", {
+          axios.get("https://skill-forge-backend.rikhiltaneja.com/tasks/particular/company", {
             headers: { Authorization: authToken },
           }),
-          axios.get("http://localhost:8080/company/one", {
+          axios.get("https://skill-forge-backend.rikhiltaneja.com/company/one", {
             headers: { Authorization: authToken },
           }),
-          axios.get("http://localhost:8080/submissions/company/particular", {
+          axios.get("https://skill-forge-backend.rikhiltaneja.com/submissions/company/particular", {
             headers: { Authorization: authToken },
           }),
         ]);

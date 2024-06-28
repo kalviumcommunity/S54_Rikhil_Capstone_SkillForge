@@ -42,7 +42,7 @@ export default function InstitutionLogin() {
     });
     setTimeout(() => {
       axios
-        .post("http://localhost:8080/institution/signin", data)
+        .post("https://skill-forge-backend.rikhiltaneja.com/institution/signin", data)
         .then((res) => {
           setCookie("auth-token", res.data, 10);
           setCookie("type", "Institution", 10);

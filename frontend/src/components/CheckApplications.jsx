@@ -49,7 +49,7 @@ export function CheckApplications({ buttonContent, size, data, fetchData }) {
     setTimeout(() => {
       axios
         .post(
-          "http://localhost:8080/applications/change/state",
+          "https://skill-forge-backend.rikhiltaneja.com/change/state",
           {
             state: state,
             application: applicationID,

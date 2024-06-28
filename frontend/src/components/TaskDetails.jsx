@@ -37,7 +37,7 @@ export default function TaskDetails() {
   const applicationDataFetch = () => {
     if (userType == "Student") {
       axios
-        .get(`http://localhost:8080/applications/particular/${id}`, {
+        .get(`https://skill-forge-backend.rikhiltaneja.com/applications/particular/${id}`, {
           headers: { Authorization: authToken },
         })
         .then((res) => {
@@ -48,7 +48,7 @@ export default function TaskDetails() {
         });
     } else if (userType == "Company") {
       axios
-        .get(`http://localhost:8080/applications/task/particular/${id}`, {
+        .get(`https://skill-forge-backend.rikhiltaneja.com/applications/task/particular/${id}`, {
           headers: { Authorization: authToken },
         })
         .then((res) => {
@@ -62,7 +62,7 @@ export default function TaskDetails() {
   const submissionsDataFetch = () => {
     if (userType == "Student") {
       axios
-        .get(`http://localhost:8080/submissions/particular/${id}`, {
+        .get(`https://skill-forge-backend.rikhiltaneja.com/submissions/particular/${id}`, {
           headers: { Authorization: authToken },
         })
         .then((res) => {
@@ -73,7 +73,7 @@ export default function TaskDetails() {
         });
     } else if (userType == "Company") {
       axios
-        .get(`http://localhost:8080/submissions/task/particular/${id}`, {
+        .get(`https://skill-forge-backend.rikhiltaneja.com/submissions/task/particular/${id}`, {
           headers: { Authorization: authToken },
         })
         .then((res) => {
@@ -88,9 +88,9 @@ export default function TaskDetails() {
     const fetchData = async () => {
       try {
         const [taskRes, submissionsRes, applicationRes] = await Promise.all([
-          axios.get(`http://localhost:8080/tasks/one/${id}`),
+          axios.get(`https://skill-forge-backend.rikhiltaneja.com/tasks/one/${id}`),
           axios.get(
-            `http://localhost:8080/submissions/${
+            `https://skill-forge-backend.rikhiltaneja.com/submissions/${
               userType === "Student" ? "particular" : "task/particular"
             }/${id}`,
             {
@@ -98,7 +98,7 @@ export default function TaskDetails() {
             }
           ),
           axios.get(
-            `http://localhost:8080/applications/${
+            `https://skill-forge-backend.rikhiltaneja.com/applications/${
               userType === "Student" ? "particular" : "task/particular"
             }/${id}`,
             {

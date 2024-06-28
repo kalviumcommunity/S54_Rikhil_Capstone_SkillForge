@@ -29,7 +29,7 @@ const CheckSubmissions = memo(
 
     useEffect(() => {
       axios
-        .get("http://localhost:8080/payments/getkey", {
+        .get("https://skill-forge-backend.rikhiltaneja.com/payments/getkey", {
           headers: {
             Authorization: authToken,
           },
@@ -45,7 +45,7 @@ const CheckSubmissions = memo(
     const markWinner = (username, subId) => {
       axios
         .post(
-          "http://localhost:8080/payments/checkout",
+          "https://skill-forge-backend.rikhiltaneja.com/payments/checkout",
           {
             amount: winAmount,
           },
@@ -60,7 +60,7 @@ const CheckSubmissions = memo(
             description: "Bounty Prize",
             image: ``,
             order_id: res.data.order.id,
-            callback_url: `http://localhost:8080/payments/paymentverification?to=${username}&amount=${winAmount}&from=${company}&id=${id}&subID=${subId}`,
+            callback_url: `https://skill-forge-backend.rikhiltaneja.com/payments/paymentverification?to=${username}&amount=${winAmount}&from=${company}&id=${id}&subID=${subId}`,
             redirect: false,
             prefill: {
               name: "",

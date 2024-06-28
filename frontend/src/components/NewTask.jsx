@@ -45,7 +45,7 @@ export default function NewTask() {
     });
     setTimeout(() => {
       axios
-        .post("http://localhost:8080/tasks/new", data, {
+        .post("https://skill-forge-backend.rikhiltaneja.com/tasks/new", data, {
           headers: { Authorization: authToken },
         })
         .then((res) => {

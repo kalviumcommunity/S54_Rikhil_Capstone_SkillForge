@@ -36,7 +36,7 @@ export default function UserRegister() {
   } = useForm();
   useEffect(() => {
     axios
-      .get("http://localhost:8080/institution/all")
+      .get("https://skill-forge-backend.rikhiltaneja.com/institution/all")
       .then((res) => {
         setData(res.data);
       })
@@ -54,7 +54,7 @@ export default function UserRegister() {
     });
     setTimeout(() => {
       axios
-        .post("http://localhost:8080/users/signin", data)
+        .post("https://skill-forge-backend.rikhiltaneja.com/users/signin", data)
         .then((res) => {
           setCookie("auth-token", res.data, 10);
           setCookie("type", "Student", 10);

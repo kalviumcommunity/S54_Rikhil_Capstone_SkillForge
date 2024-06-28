@@ -41,13 +41,13 @@ export default function IndustryTasks() {
       if (userType == "Student") {
         try {
           const [applicationRes, submissionsRes, tasksRes] = await Promise.all([
-            axios.get("http://localhost:8080/applications/user/particular", {
+            axios.get("https://skill-forge-backend.rikhiltaneja.com/applications/user/particular", {
               headers: { Authorization: authToken },
             }),
-            axios.get("http://localhost:8080/submissions/user/particular", {
+            axios.get("https://skill-forge-backend.rikhiltaneja.com/submissions/user/particular", {
               headers: { Authorization: authToken },
             }),
-            axios.get("http://localhost:8080/tasks/all"),
+            axios.get("https://skill-forge-backend.rikhiltaneja.com/tasks/all"),
           ]);
           setApplications(applicationRes.data);
           setSubmissions(submissionsRes.data);
@@ -57,7 +57,7 @@ export default function IndustryTasks() {
         }
       } else {
         axios
-          .get("http://localhost:8080/tasks/all")
+          .get("https://skill-forge-backend.rikhiltaneja.com/tasks/all")
           .then((res) => {
             setData(res.data);
           })

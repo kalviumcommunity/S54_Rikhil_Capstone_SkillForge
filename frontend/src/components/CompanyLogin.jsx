@@ -42,7 +42,7 @@ export default function CompanyRegister() {
     });
     setTimeout(() => {
       axios
-        .post("http://localhost:8080/company/signin", data)
+        .post("https://skill-forge-backend.rikhiltaneja.com/company/signin", data)
         .then((res) => {
           setCookie("auth-token", res.data, 10);
           setCookie("type", "Company", 10);

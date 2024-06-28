@@ -47,7 +47,7 @@ export default function SubmitForTask() {
     });
     setTimeout(() => {
       axios
-        .post(`http://localhost:8080/submissions/new/${id}`, data, {
+        .post(`https://skill-forge-backend.rikhiltaneja.com/submissions/new/${id}`, data, {
           headers: { Authorization: authToken },
         })
         .then((res) => {
