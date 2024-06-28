@@ -24,6 +24,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { MdSpaceDashboard } from "react-icons/md";
 import { MdCorporateFare } from "react-icons/md";
 import { FaUniversity } from "react-icons/fa";
+import { IoIosArrowUp } from "react-icons/io";
 
 export default function Navbar() {
   const [isMobile, setIsMobile] = useState(false);
@@ -72,38 +73,47 @@ export default function Navbar() {
       );
     }
   };
+  console.log(login);
   const mainMenuOptions = () => {
-    if (userType == "Student") {
-      return (
-        <>
-          <Link to={"/user/dashboard"}>
+    if (login) {
+      if (userType == "Student") {
+        return (
+          <>
+            <Link to={"/user/dashboard"}>
+              <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
+            </Link>
+            <Link to={"/industry/tasks"}>
+              <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem>
+            </Link>
+            <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem>
+          </>
+        );
+      } else if (userType == "Company") {
+        return (
+          <>
+            <Link to={"/company/dashboard"}>
+              <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
+            </Link>
+            <Link to={"/industry/tasks"}>
+              <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem>
+            </Link>
+            {/* <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem> */}
+          </>
+        );
+      } else if (userType == "Institution") {
+        return (
+          <>
             <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
-          </Link>
-          <Link to={"/industry/tasks"}>
-            <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem>
-          </Link>
-          <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem>
-        </>
-      );
-    } else if (userType == "Company") {
+            {/* <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem> */}
+            <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem>
+          </>
+        );
+      }
+    } else {
       return (
-        <>
-          <Link to={"/company/dashboard"}>
-            <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
-          </Link>
-          <Link to={'/industry/tasks'}>
-            <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem>
-          </Link>
-          {/* <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem> */}
-        </>
-      );
-    } else if (userType == "Institution") {
-      return (
-        <>
-          <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
-          {/* <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem> */}
-          <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem>
-        </>
+        <Link to={"/prelogin"}>
+          <MenuItem icon={<IoIosLogIn />}>Login to view Services</MenuItem>
+        </Link>
       );
     }
   };
@@ -140,14 +150,20 @@ export default function Navbar() {
               <Text className="2vmin">Home</Text>
             </Link>
             <Menu>
-              <MenuButton
-                as={Button}
-                colorScheme="transparent"
-                rightIcon={<IoIosArrowDown />}
-              >
-                Services
-              </MenuButton>
-              <MenuList color={"#8a3bf3"}>{mainMenuOptions()}</MenuList>
+              {({ isOpen }) => (
+                <>
+                  <MenuButton
+                    as={Button}
+                    colorScheme="transparent"
+                    rightIcon={
+                      isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />
+                    }
+                  >
+                    Services
+                  </MenuButton>
+                  <MenuList color={"#8a3bf3"}>{mainMenuOptions()}</MenuList>
+                </>
+              )}
             </Menu>
             <Link>
               <Text className="2vmin">FAQs</Text>
