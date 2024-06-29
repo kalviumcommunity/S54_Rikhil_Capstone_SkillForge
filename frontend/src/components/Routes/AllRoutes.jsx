@@ -17,6 +17,7 @@ import IndustryTasks from "../IndustryTasks";
 import TaskDetails from "../TaskDetails";
 import ApplyForTask from "../ApplyForTask";
 import SubmitForTask from "../SubmitForTask";
+import FAQs from "../FAQs";
 
 export default function AllRoutes() {
   return (
@@ -99,6 +100,7 @@ export default function AllRoutes() {
           </Login>
         }
       />
+      <Route path="/faq" element={<FAQs />} />
     </Routes>
   );
 }

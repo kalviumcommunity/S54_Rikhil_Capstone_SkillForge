@@ -140,6 +140,14 @@
   color: white;
   flex: 1;
 }
+.faq-parent{
+  color: white;
+  flex: 1;
+  padding: 8vmin 13vmin;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 @media (max-width: 800px) {
   .form {
     width: 80vw;

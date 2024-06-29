@@ -136,7 +136,7 @@ export default function Navbar() {
             <MenuList color={"#8a3bf3"}>
               <MenuItem icon={<FaHome />}>Home</MenuItem>
               <MenuItem icon={<SiGoogletasks />}>Tasks</MenuItem>
-              <MenuItem icon={<FaQuestion />}>FAQs</MenuItem>
+              <MenuItem as={Link} to={'/faq'} icon={<FaQuestion />}>FAQs</MenuItem>
               <Link to={"/prelogin"}>
                 <MenuItem icon={<IoIosLogIn />}>Login</MenuItem>
               </Link>
@@ -165,7 +165,7 @@ export default function Navbar() {
                 </>
               )}
             </Menu>
-            <Link>
+            <Link to={'/faq'}>
               <Text className="2vmin">FAQs</Text>
             </Link>
           </HStack>
