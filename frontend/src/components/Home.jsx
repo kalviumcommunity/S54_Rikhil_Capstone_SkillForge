@@ -1,5 +1,6 @@
 import { Button, HStack, Stack, Text } from "@chakra-ui/react";
 import React from "react";
+import { trigger } from "../utils/driver";
 
 export default function Home() {
   document.title = "SkillForge";
@@ -15,7 +16,11 @@ export default function Home() {
         various industy level businesses and organizations.
       </Text>
       <HStack paddingTop={"1vmin"} spacing={"3vmin"}>
-        <Button size={["xs", "sm", "md"]} colorScheme="whiteAlpha">
+        <Button
+          onClick={trigger}
+          size={["xs", "sm", "md"]}
+          colorScheme="whiteAlpha"
+        >
           How it works?
         </Button>
         <Button size={["xs", "sm", "md"]} colorScheme="purple">

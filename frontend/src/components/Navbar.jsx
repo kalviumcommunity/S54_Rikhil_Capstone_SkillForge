@@ -110,7 +110,7 @@ export default function Navbar() {
   return (
     <div className="nav-parent">
       <Link to={"/"}>
-        <Text as={"b"} fontSize={["2.5vmax", "3vmax", "2vmax", "1.8vmax"]}>
+        <Text id="logo" as={"b"} fontSize={["2.5vmax", "3vmax", "2vmax", "1.8vmax"]}>
           Skill<span style={{ color: "#8a3bf3" }}>Forge</span>
         </Text>
       </Link>
@@ -124,9 +124,9 @@ export default function Navbar() {
               icon={<GiHamburgerMenu color="white" />}
             />
             <MenuList color={"#8a3bf3"}>
-              <MenuItem icon={<FaHome />}>Home</MenuItem>
-              <MenuItem icon={<SiGoogletasks />}>Tasks</MenuItem>
-              <MenuItem icon={<FaQuestion />}>FAQs</MenuItem>
+                <MenuItem icon={<FaHome />}>Home</MenuItem>
+                <MenuItem icon={<SiGoogletasks />}>Tasks</MenuItem>
+                <MenuItem icon={<FaQuestion />}>FAQs</MenuItem>
               <Link to={"/prelogin"}>
                 <MenuItem icon={<IoIosLogIn />}>Login</MenuItem>
               </Link>
@@ -135,8 +135,8 @@ export default function Navbar() {
         </>
       ) : (
         <>
-          <HStack spacing={"10vmin"}>
-            <Link>
+          <HStack className="opts" spacing={"10vmin"}>
+            <Link className="opt-1">
               <Text className="2vmin">Home</Text>
             </Link>
             <Menu>
@@ -144,12 +144,13 @@ export default function Navbar() {
                 as={Button}
                 colorScheme="transparent"
                 rightIcon={<IoIosArrowDown />}
+                className="opt-2"
               >
                 Services
               </MenuButton>
               <MenuList color={"#8a3bf3"}>{mainMenuOptions()}</MenuList>
             </Menu>
-            <Link>
+            <Link className="opt-3">
               <Text className="2vmin">FAQs</Text>
             </Link>
           </HStack>
