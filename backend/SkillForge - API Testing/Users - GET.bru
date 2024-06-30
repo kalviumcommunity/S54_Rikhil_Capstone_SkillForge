@@ -1,0 +1,16 @@
+meta {
+  name: Users - GET
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://skill-forge-backend.rikhiltaneja.com/users/one
+  body: none
+  auth: none
+}
+
+(on-purpose, auth token value is wrong to prevent misuse)
+headers {
+  Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Im5hbWUiOiJSaWtoaWwgVGFuZWphIiwidXNlcm5hbWUiOiJyaWsiLCJpbnN0aXR1dGlvbiI6IjY2MjI0MDdiY2FhNDE4MDlhYjYyMWFjNyJ9LCJ0eXBlIjoiU3R1ZGVudCIsImlhdCI6MTcxOTc2Njc3M30.iPLXuoxP-GFfbIMnMctsRMmdXaeveWtPdV
+}
