@@ -1,6 +1,7 @@
 import { Button, HStack, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { trigger } from "../utils/driver";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   document.title = "SkillForge";
@@ -23,9 +24,11 @@ export default function Home() {
         >
           How it works?
         </Button>
-        <Button size={["xs", "sm", "md"]} colorScheme="purple">
-          Browse Tasks
-        </Button>
+        <Link to={'/industry/tasks'}>
+          <Button size={["xs", "sm", "md"]} colorScheme="purple">
+            Browse Tasks
+          </Button>
+        </Link>
       </HStack>
     </div>
   );
