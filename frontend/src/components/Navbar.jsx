@@ -7,6 +7,7 @@ import {
   MenuItem,
   MenuList,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { IoIosLogIn } from "react-icons/io";
@@ -73,7 +74,7 @@ export default function Navbar() {
       );
     }
   };
-  console.log(login);
+  // console.log(login);
   const mainMenuOptions = () => {
     if (login) {
       if (userType == "Student") {
@@ -85,7 +86,7 @@ export default function Navbar() {
             <Link to={"/industry/tasks"}>
               <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem>
             </Link>
-            <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem>
+            <Tooltip label='Comming soon!'><MenuItem color={'grey'} disabled icon={<FaUniversity />}>Institution Events</MenuItem></Tooltip>
           </>
         );
       } else if (userType == "Company") {
@@ -105,7 +106,7 @@ export default function Navbar() {
           <>
             <MenuItem icon={<MdSpaceDashboard />}>Dashboard</MenuItem>
             {/* <MenuItem icon={<MdCorporateFare />}>Industry Tasks</MenuItem> */}
-            <MenuItem icon={<FaUniversity />}>Institution Events</MenuItem>
+            <Tooltip label='Comming soon!'><MenuItem color={'grey'} disabled icon={<FaUniversity />}>Institution Events</MenuItem></Tooltip>
           </>
         );
       }
